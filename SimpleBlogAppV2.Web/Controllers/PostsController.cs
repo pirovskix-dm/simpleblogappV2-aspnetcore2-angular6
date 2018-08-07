@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace SimpleBlogAppV2.Web.Controllers
 {
 	[Produces("application/json")]
-	[Route("api/Posts")]
+	[Route("api/posts")]
 	public class PostsController : Controller
 	{
 		private readonly IUnitOfWorkService unitOfWork;
