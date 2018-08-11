@@ -14,23 +14,14 @@ export class PostService {
 	}
 
 	getPosts(): Observable<PostViewModel[]> {
-		return this.http
-			.get(this.postEndpoint)
-			.pipe(
-				map((res: any) => res as PostViewModel[])
-			);
+		return this.http.get<PostViewModel[]>(this.postEndpoint);
 	}
 
 	getPost(id: number): Observable<PostViewModel> {
-		return this.http
-			.get(`${this.postEndpoint}/${id}`)
-			.pipe(
-				map((res: any) => res as PostViewModel)
-			);
+		return this.http.get<PostViewModel>(`${this.postEndpoint}/${id}`);
 	}
 
 	create(savePost: SavePostViewModel): Observable<any> {
-		return this.http
-			.post(this.postEndpoint, savePost);
+		return this.http.post(this.postEndpoint, savePost);
 	}
 }

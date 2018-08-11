@@ -12,3 +12,4 @@ export interface SavePostViewModel {
 	content: string;
 	shortContent: string;
 }
+

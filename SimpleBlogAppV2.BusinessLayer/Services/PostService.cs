@@ -30,6 +30,28 @@ namespace SimpleBlogAppV2.BusinessLayer.Services
 			});
 		}
 
+		public async Task<IEnumerable<PostDTO>> GetAdminPosts()
+		{
+			return await postRepository.GetAllAsync((Post p) => new PostDTO()
+			{
+				Id = p.Id,
+				Title = p.Title,
+				DateCreated = p.DateCreated,
+				DateLastUpdated = p.DateLastUpdated
+			});
+		}
+
+		public async Task<IEnumerable<PostDTO>> GetBlogPosts()
+		{
+			return await postRepository.GetAllAsync((Post p) => new PostDTO()
+			{
+				Id = p.Id,
+				Title = p.Title,
+				ShortContent = p.ShortContent,
+				DateCreated = p.DateCreated
+			});
+		}
+
 		public async Task<PostDTO> GetPost(int id)
 		{
 			return await postRepository.GetAsync(id, (Post p) => new PostDTO()
