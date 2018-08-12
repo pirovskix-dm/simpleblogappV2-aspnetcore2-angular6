@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {PostViewModel} from '../../models/post-view-model';
+import {PostService} from '../../services/post.service';
+import '../../utils/extensions';
 
 @Component({
 	selector: 'app-admin',
@@ -7,14 +9,38 @@ import {PostViewModel} from '../../models/post-view-model';
 	styleUrls: ['./admin.component.css']
 })
 export class AdminComponent implements OnInit {
-	posts: PostViewModel[] = [];
+	public totalPosts = 0;
+	public posts: PostViewModel[] = [];
+	public infoMessage = `Loading...`;
 
-	constructor() {
-
+	constructor(
+		private postService: PostService
+	) {
 	}
 
-	ngOnInit() {
-
+	public ngOnInit(): void {
+		this.populatePosts();
 	}
 
+	public dateFormat(date: string | null): string {
+		if (date === null) {
+			return ``;
+		}
+		return date.toDDMMYYYY(`.`);
+	}
+
+	public delete(id: number): void {
+		this.postService.delete(id).subscribe(i => {
+			this.populatePosts();
+		}, err => console.error(`Fail deleting posts`, err));
+	}
+
+	private populatePosts(): void {
+		this.postService.getAdminPosts()
+			.subscribe(ps => {
+				this.totalPosts = ps.length;
+				this.posts = ps;
+				this.infoMessage = `nothing found`;
+			}, err => console.error(`Fail populating posts`, err));
+	}
 }

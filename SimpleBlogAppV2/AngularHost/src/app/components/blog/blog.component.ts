@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {PostViewModel, SavePostViewModel} from '../../models/post-view-model';
+import {PostViewModel} from '../../models/post-view-model';
 import {PostService} from '../../services/post.service';
 
 @Component({

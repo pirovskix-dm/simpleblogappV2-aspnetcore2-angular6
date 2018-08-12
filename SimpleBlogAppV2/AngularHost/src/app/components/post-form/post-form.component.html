@@ -1,0 +1,48 @@
+<h1>{{pageTitle}}</h1>
+
+<form class="post-form" [formGroup]="postForm" (ngSubmit)="onSubmit()">
+	<!-- Id -->
+	<div *ngIf="id" class="form-group row">
+		<label for="postId" class="col-sm-2 col-form-label">Id</label>
+		<div class="col-sm-10">
+			<input id="postId" type="text" readonly class="form-control-plaintext" value="{{id}}">
+		</div>
+	</div>
+
+	<!-- Title -->
+	<div class="form-group">
+		<label for="title">Email address</label>
+		<input id="title" type="text" class="form-control" aria-describedby="titleHelp" formControlName="title">
+		<small id="titleHelp" class="form-text text-muted">* Required field.</small>
+	</div>
+
+	<!-- Short content -->
+	<div class="form-group">
+		<label for="shortContent">Short content</label>
+		<textarea id="shortContent" class="form-control" rows="3" formControlName="shortContent"></textarea>
+	</div>
+
+	<!-- Content -->
+	<div class="form-group">
+		<label for="content">Content</label>
+		<textarea id="content" class="form-control" aria-describedby="contentHelp" rows="5" formControlName="content"></textarea>
+		<small id="contentHelp" class="form-text text-muted">* Required field.</small>
+	</div>
+
+	<!-- Date created -->
+	<div class="form-group row">
+		<label for="dateCreated" class="col-sm-2 col-form-label">Created: </label>
+		<div class="col-sm-10">
+			<input id="dateCreated" type="text" readonly class="form-control-plaintext" value="{{dateFormat(pvm.dateCreated)}}">
+		</div>
+	</div>
+
+	<!-- Buttons -->
+	<div class="form-group btn-toolbar">
+		<button type="submit" *ngIf="id" class="btn btn-primary">Save</button>
+		<button type="submit" *ngIf="!id" class="btn btn-primary">Create</button>
+		<button type="button" *ngIf="id" class="btn btn-danger" (click)="delete()">Delete</button>
+		<a [routerLink]="['/admin']" class="btn btn-primary">Back</a>
+	</div>
+
+</form>

@@ -11,10 +11,12 @@ namespace SimpleBlogAppV2.BusinessLayer.Services
 	public class PostService : IPostService
 	{
 		private readonly IPostRepository postRepository;
+		private Post processedPost;
 
 		public PostService(IPostRepository postRepository)
 		{
 			this.postRepository = postRepository;
+			processedPost = null;
 		}
 
 		public async Task<IEnumerable<PostDTO>> GetAllPosts()
@@ -65,18 +67,57 @@ namespace SimpleBlogAppV2.BusinessLayer.Services
 			});
 		}
 
-		public void AddPost(PostDTO savePost)
+		public bool AddPost(PostDTO savePost)
 		{
 			var post = new Post()
 			{
 				Title = savePost.Title,
 				Content = savePost.Content,
 				ShortContent = savePost.ShortContent,
-				DateCreated = DateTime.Now,
-				DateLastUpdated = DateTime.Now
+				DateCreated = DateTime.UtcNow,
+				DateLastUpdated = DateTime.UtcNow
 			};
 
+			processedPost = post;
+
 			postRepository.Add(post);
+			return true;
+		}
+
+		public async Task<bool> UpdatePost(int id, PostDTO savePost)
+		{
+			var post = await postRepository.GetAsync(id, p => p);
+			if (post == null)
+				return false;
+
+			post.Title = savePost.Title;
+			post.ShortContent = savePost.ShortContent;
+			post.Content = savePost.Content;
+			post.DateLastUpdated = DateTime.UtcNow;
+
+			processedPost = post;
+
+			postRepository.Update(post);
+
+			return true;
+		}
+
+		public bool RemovePost(int id)
+		{
+			var post = new Post() { Id = id };
+			processedPost = post;
+			postRepository.Remove(post);
+			return true;
+		}
+
+		public async Task<bool> AddOrUpdatePost(int? id, PostDTO savePost)
+		{
+			return id.HasValue ? await UpdatePost(id.Value, savePost) : AddPost(savePost);
+		}
+
+		public int GetProcessedPostId()
+		{
+			return processedPost?.Id ?? 0;
 		}
 	}
 }

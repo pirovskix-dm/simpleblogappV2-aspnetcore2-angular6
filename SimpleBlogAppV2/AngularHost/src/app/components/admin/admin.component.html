@@ -1,3 +1,37 @@
-<p>
-  admin works!
-</p>
+<div class="container">
+	<h2>Admin</h2>
+
+	<!-- New post button -->
+	<div class="form-group btn-toolbar">
+		<a [routerLink]="['/post/create']" class="btn btn-primary">Create</a>
+	</div>
+
+	<!-- Table -->
+	<div class="row">
+		<table *ngIf="totalPosts" class="table table-hover table-condensed table-bordered">
+			<thead>
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">Title</th>
+				<th scope="col">Created</th>
+				<th scope="col">Updated</th>
+				<th scope="col"></th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr *ngFor="let p of posts">
+				<th scope="row">{{p.id}}</th>
+				<td>{{p.title}}</td>
+				<td>{{dateFormat(p.dateCreated)}}</td>
+				<td>{{dateFormat(p.dateLastUpdated)}}</td>
+				<td>
+					<a [routerLink]="['/post/edit/', p.id]">Edit</a> |
+					<a role="button" (click)="delete(p.id)">Delete</a>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+		<p *ngIf="!totalPosts">{{infoMessage}}</p>
+	</div>
+
+</div>
