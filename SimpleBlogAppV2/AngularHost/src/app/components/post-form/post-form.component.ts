@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {PostViewModel} from '../../models/post-view-model';
-import {FormGroup, Validators, FormControl} from '@angular/forms';
 import {PostService} from '../../services/post.service';
 import {ActivatedRoute, Router} from '@angular/router';
 
@@ -10,29 +9,17 @@ import {ActivatedRoute, Router} from '@angular/router';
 	styleUrls: ['./post-form.component.css']
 })
 export class PostFormComponent implements OnInit {
+
 	public id = 0;
 	public pageTitle = '';
-	public postForm: FormGroup;
-	public pvm: PostViewModel = {
-		id: 0,
-		title: ``,
-		shortContent: ``,
-		content: ``,
-		dateCreated: ``,
-		dateLastUpdated: ``
-	};
-	private controls: any = {
-		title: new FormControl(``, [Validators.required, Validators.maxLength(100)]),
-		shortContent: new FormControl(``, Validators.maxLength(500)),
-		content: new FormControl(``, Validators.required)
-	};
+	public viewModel: PostViewModel;
 
 	constructor(
 		private postService: PostService,
 		private route: ActivatedRoute,
 		private router: Router
 	) {
-		this.postForm = new FormGroup(this.controls);
+		this.viewModel = new PostViewModel();
 	}
 
 	public ngOnInit(): void {
@@ -46,10 +33,13 @@ export class PostFormComponent implements OnInit {
 	}
 
 	public onSubmit(): void {
-		if (this.id > 0)
-			this.updatePost();
-		else
+		if (this.viewModel.Form.invalid)
+			return;
+
+		if (this.id < 1)
 			this.createPost();
+		else
+			this.updatePost();
 	}
 
 	public delete(): void {
@@ -64,19 +54,17 @@ export class PostFormComponent implements OnInit {
 	}
 
 	private updatePost(): void {
-		this.readControls();
 		this.postService
-			.update(this.id, this.pvm)
+			.update(this.id, this.viewModel.Model)
 			.subscribe(id => console.log(`save success`),
 				err => console.error(`Fail updating posts`, err));
 	}
 
 	private createPost(): void {
-		this.readControls();
 		this.postService
-			.create(this.pvm)
+			.create(this.viewModel.Model)
 			.subscribe(id => this.router.navigate(['/admin']),
-				err => console.error(`Fail updating posts`, err));
+				err => console.error(`Fail creating posts`, err));
 	}
 
 	private  deletePost(): void {
@@ -89,22 +77,12 @@ export class PostFormComponent implements OnInit {
 	private populatePost(): void {
 		this.postService
 			.getPost(this.id)
-			.subscribe(post => this.initForm(post),
-				err => {
+			.subscribe(post => {
+					this.viewModel.Model = post;
+				}, err => {
 					console.error(`Fail populating posts`, err);
 					this.router.navigate(['/admin']);
 				});
-	}
-
-	private initForm(post: PostViewModel): void {
-		this.pvm = post;
-		this.postForm.patchValue(post);
-	}
-
-	private readControls(): void {
-		this.pvm.title = this.controls.title.value || ``;
-		this.pvm.shortContent = this.controls.shortContent.value || ``;
-		this.pvm.content = this.controls.content.value || ``;
 	}
 }
 

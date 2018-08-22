@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {PostViewModel} from '../models/post-view-model';
+import {PostModel} from '../models/post-view-model';
 
 @Injectable({providedIn: 'root'})
 export class PostService {
@@ -12,27 +12,27 @@ export class PostService {
 
 	}
 
-	getPosts(): Observable<PostViewModel[]> {
-		return this.http.get<PostViewModel[]>(this.postEndpoint);
+	getPosts(): Observable<PostModel[]> {
+		return this.http.get<PostModel[]>(this.postEndpoint);
 	}
 
-	getAdminPosts(): Observable<PostViewModel[]> {
-		return this.http.get<PostViewModel[]>(`${this.postEndpoint}/admin`);
+	getAdminPosts(): Observable<PostModel[]> {
+		return this.http.get<PostModel[]>(`${this.postEndpoint}/admin`);
 	}
 
-	getBlogPosts(): Observable<PostViewModel[]> {
-		return this.http.get<PostViewModel[]>(`${this.postEndpoint}/blog`);
+	getBlogPosts(): Observable<PostModel[]> {
+		return this.http.get<PostModel[]>(`${this.postEndpoint}/blog`);
 	}
 
-	getPost(id: number): Observable<PostViewModel> {
-		return this.http.get<PostViewModel>(`${this.postEndpoint}/${id}`);
+	getPost(id: number): Observable<PostModel> {
+		return this.http.get<PostModel>(`${this.postEndpoint}/${id}`);
 	}
 
-	getDefaultPost(): Observable<PostViewModel> {
-		return this.http.get<PostViewModel>(`${this.postEndpoint}/default`);
+	getDefaultPost(): Observable<PostModel> {
+		return this.http.get<PostModel>(`${this.postEndpoint}/default`);
 	}
 
-	create(post: PostViewModel): Observable<number> {
+	create(post: PostModel): Observable<number> {
 		return this.http.post<number>(this.postEndpoint, post);
 	}
 
@@ -40,7 +40,7 @@ export class PostService {
 		return this.http.delete<number>(`${this.postEndpoint}/${id}`);
 	}
 
-	update(id: number, post: PostViewModel): Observable<number> {
+	update(id: number, post: PostModel): Observable<number> {
 		return this.http.put<number>(`${this.postEndpoint}/${id}`, post);
 	}
 }

@@ -10,6 +10,7 @@ import {HomeComponent} from './components/home/home.component';
 import {BlogComponent} from './components/blog/blog.component';
 import {AdminComponent} from './components/admin/admin.component';
 import {PostFormComponent} from './components/post-form/post-form.component';
+import {PostViewComponent} from './components/post-view/post-view.component';
 
 import {PostService} from './services/post.service';
 
@@ -20,7 +21,8 @@ import {PostService} from './services/post.service';
 		HomeComponent,
 		BlogComponent,
 		AdminComponent,
-		PostFormComponent
+		PostFormComponent,
+		PostViewComponent
 	],
 	imports: [
 		BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
@@ -29,11 +31,12 @@ import {PostService} from './services/post.service';
 		ReactiveFormsModule,
 		RouterModule.forRoot([
 			{path: '', component: BlogComponent, pathMatch: 'full'},
+			{path: 'home', redirectTo: ''},
 			{path: 'admin', component: AdminComponent},
+			{path: 'error', redirectTo: ''},
 			{path: 'post/create', component: PostFormComponent},
 			{path: 'post/edit/:id', component: PostFormComponent},
-			{path: 'error', redirectTo: ''},
-			{path: 'home', redirectTo: ''},
+			{path: 'post/:id', component: PostViewComponent},
 			{path: '**', redirectTo: ''}
 		])
 	],

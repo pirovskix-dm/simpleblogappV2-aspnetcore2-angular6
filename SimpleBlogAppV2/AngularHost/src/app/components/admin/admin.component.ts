@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {PostViewModel} from '../../models/post-view-model';
+import {PostModel} from '../../models/post-view-model';
 import {PostService} from '../../services/post.service';
 import '../../utils/extensions';
 
@@ -9,8 +9,9 @@ import '../../utils/extensions';
 	styleUrls: ['./admin.component.css']
 })
 export class AdminComponent implements OnInit {
+
 	public totalPosts = 0;
-	public posts: PostViewModel[] = [];
+	public posts: PostModel[] = [];
 	public infoMessage = `Loading...`;
 
 	constructor(

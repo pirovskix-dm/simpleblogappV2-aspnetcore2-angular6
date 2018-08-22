@@ -1,0 +1,24 @@
+<div class="container">
+  <h1>Simple Blog App</h1>
+</div>
+
+<h2 *ngIf="pageNotFound">Post Not Found</h2>
+
+<div *ngIf="!pageNotFound" class="container">
+
+	<!-- Title -->
+	<div>
+		<h2>{{post.get('title')}}</h2>
+	</div>
+
+	<!-- Date -->
+	<div>
+		<p>{{post.get('dateCreated')}}</p>
+	</div>
+
+	<!-- Content -->
+	<div>
+		<p>{{post.get('content')}}</p>
+	</div>
+
+</div>

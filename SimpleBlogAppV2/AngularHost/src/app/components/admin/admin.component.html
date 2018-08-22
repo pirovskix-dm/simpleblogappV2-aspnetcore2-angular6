@@ -26,7 +26,8 @@
 				<td>{{dateFormat(p.dateLastUpdated)}}</td>
 				<td>
 					<a [routerLink]="['/post/edit/', p.id]">Edit</a> |
-					<a role="button" (click)="delete(p.id)">Delete</a>
+					<a role="button" (click)="delete(p.id)">Delete</a> |
+					<a [routerLink]="['/post/', p.id]">View</a>
 				</td>
 			</tr>
 			</tbody>

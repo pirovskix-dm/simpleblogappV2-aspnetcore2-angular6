@@ -1,9 +1,9 @@
 <h1>{{pageTitle}}</h1>
 
-<form class="post-form" [formGroup]="postForm" (ngSubmit)="onSubmit()">
+<form class="post-form" [formGroup]="viewModel.Form" (ngSubmit)="onSubmit()">
 	<!-- Id -->
 	<div *ngIf="id" class="form-group row">
-		<label for="postId" class="col-sm-2 col-form-label">Id</label>
+		<label for="postId" class="col-sm-2 col-form-label">Id:</label>
 		<div class="col-sm-10">
 			<input id="postId" type="text" readonly class="form-control-plaintext" value="{{id}}">
 		</div>
@@ -11,36 +11,37 @@
 
 	<!-- Title -->
 	<div class="form-group">
-		<label for="title">Email address</label>
-		<input id="title" type="text" class="form-control" aria-describedby="titleHelp" formControlName="title">
-		<small id="titleHelp" class="form-text text-muted">* Required field.</small>
+		<label for="title">Title</label>
+		<input id="title" type="text" class="form-control" [class.is-invalid]="viewModel.validate('title')" aria-describedby="titleHelp" formControlName="title">
+		<div class="invalid-feedback" *ngIf="viewModel.validate('title')">Required field.</div>
 	</div>
 
 	<!-- Short content -->
 	<div class="form-group">
 		<label for="shortContent">Short content</label>
-		<textarea id="shortContent" class="form-control" rows="3" formControlName="shortContent"></textarea>
+		<textarea id="shortContent" class="form-control" [class.is-invalid]="viewModel.validate('shortContent')" rows="3" formControlName="shortContent"></textarea>
+		<div class="invalid-feedback" *ngIf="viewModel.validate('shortContent')">Required field.</div>
 	</div>
 
 	<!-- Content -->
 	<div class="form-group">
 		<label for="content">Content</label>
-		<textarea id="content" class="form-control" aria-describedby="contentHelp" rows="5" formControlName="content"></textarea>
-		<small id="contentHelp" class="form-text text-muted">* Required field.</small>
+		<textarea id="content" class="form-control" [class.is-invalid]="viewModel.validate('content')" aria-describedby="contentHelp" rows="5" formControlName="content"></textarea>
+		<div class="invalid-feedback" *ngIf="viewModel.validate('content')">Required field.</div>
 	</div>
 
 	<!-- Date created -->
-	<div class="form-group row">
+	<div *ngIf="id" class="form-group row">
 		<label for="dateCreated" class="col-sm-2 col-form-label">Created: </label>
 		<div class="col-sm-10">
-			<input id="dateCreated" type="text" readonly class="form-control-plaintext" value="{{dateFormat(pvm.dateCreated)}}">
+			<input id="dateCreated" type="text" readonly class="form-control-plaintext" value="{{dateFormat(viewModel.get('dateCreated'))}}">
 		</div>
 	</div>
 
 	<!-- Buttons -->
 	<div class="form-group btn-toolbar">
-		<button type="submit" *ngIf="id" class="btn btn-primary">Save</button>
-		<button type="submit" *ngIf="!id" class="btn btn-primary">Create</button>
+		<button type="submit" *ngIf="id" class="btn btn-primary" [disabled]="viewModel.Form.invalid">Save</button>
+		<button type="submit" *ngIf="!id" class="btn btn-primary" [disabled]="viewModel.Form.invalid">Create</button>
 		<button type="button" *ngIf="id" class="btn btn-danger" (click)="delete()">Delete</button>
 		<a [routerLink]="['/admin']" class="btn btn-primary">Back</a>
 	</div>

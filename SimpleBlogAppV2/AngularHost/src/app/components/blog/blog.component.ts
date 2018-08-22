@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {PostViewModel} from '../../models/post-view-model';
+import {PostModel} from '../../models/post-view-model';
 import {PostService} from '../../services/post.service';
 
 @Component({
@@ -8,13 +8,14 @@ import {PostService} from '../../services/post.service';
 	styleUrls: ['./blog.component.css']
 })
 export class BlogComponent implements OnInit {
-	posts: PostViewModel[] = [];
+
+	public posts: PostModel[] = [];
 
 	constructor(
 		private  postService: PostService
 	) {}
 
-	ngOnInit() {
+	public ngOnInit() {
 		this.populatePosts();
 	}
 
