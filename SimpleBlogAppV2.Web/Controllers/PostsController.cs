@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SimpleBlogAppV2.BusinessLayer.DTO;
 using SimpleBlogAppV2.BusinessLayer.Interfaces.Services;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -27,15 +28,31 @@ namespace SimpleBlogAppV2.Web.Controllers
 		}
 
 		[HttpGet("blog")]
-		public async Task<IEnumerable<PostDTO>> GetBlogPosts()
+		public async Task<IActionResult> GetBlogPosts(QueryObjectDTO query)
 		{
-			return await postService.GetBlogPosts();
+			try
+			{
+				var result = await postService.GetBlogQueryResult(query);
+				return Ok(result);
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, ex);
+			}
 		}
 
 		[HttpGet("admin")]
-		public async Task<IEnumerable<PostDTO>> GetAdminPosts()
+		public async Task<IActionResult> GetAdminPosts(QueryObjectDTO query)
 		{
-			return await postService.GetAdminPosts();
+			try
+			{
+				var result = await postService.GetAdminQueryResult(query);
+				return Ok(result);
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, ex);
+			}
 		}
 
 		[HttpGet("default")]
@@ -47,10 +64,17 @@ namespace SimpleBlogAppV2.Web.Controllers
 		[HttpGet("{id}")]
 		public async Task<IActionResult> GetPost([FromRoute] int id)
 		{
-			var post = await postService.GetPost(id);
-			if (post == null)
-				return NotFound();
-			return Ok(post);
+			try
+			{
+				var result = await postService.GetPost(id);
+				if (result == null)
+					return NotFound();
+				return Ok(result);
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, ex);
+			}
 		}
 
 		[HttpPost]
@@ -68,12 +92,16 @@ namespace SimpleBlogAppV2.Web.Controllers
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> DeletePost([FromRoute] int id)
 		{
-			postService.RemovePost(id);
-
-			if (!await unitOfWork.TrySaveChangesAsync())
-				return StatusCode(StatusCodes.Status500InternalServerError);
-
-			return Ok(id);
+			try
+			{
+				postService.RemovePost(id);
+				await unitOfWork.SaveChangesAsync();
+				return Ok(id);
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, ex);
+			}
 		}
 
 		private async Task<IActionResult> CreateOrUpdatePost(int? id, PostDTO savePost)
@@ -81,14 +109,19 @@ namespace SimpleBlogAppV2.Web.Controllers
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
-			bool success = await postService.AddOrUpdatePost(id, savePost);
-			if (!success)
-				return NotFound();
+			try
+			{
+				bool success = await postService.AddOrUpdatePost(id, savePost);
+				if (!success)
+					return NotFound();
 
-			if (!await unitOfWork.TrySaveChangesAsync())
-				return StatusCode(StatusCodes.Status500InternalServerError);
-
-			return Ok(postService.GetProcessedPostId());
+				await unitOfWork.SaveChangesAsync();
+				return Ok(postService.GetProcessedPostId());
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, ex);
+			}
 		}
 	}
 }

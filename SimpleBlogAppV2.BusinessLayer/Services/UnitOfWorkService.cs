@@ -13,17 +13,9 @@ namespace SimpleBlogAppV2.BusinessLayer.Services
 			this.unitOfWork = unitOfWork;
 		}
 
-		public async Task<bool> TrySaveChangesAsync()
+		public async Task SaveChangesAsync()
 		{
-			try
-			{
-				await unitOfWork.SaveAsync();
-				return true;
-			}
-			catch
-			{
-				return false;
-			}
+			await unitOfWork.SaveAsync();
 		}
 	}
 }

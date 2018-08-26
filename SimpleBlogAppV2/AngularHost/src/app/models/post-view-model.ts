@@ -1,5 +1,4 @@
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {AbstractControlOptions} from '@angular/forms/src/model';
 import {ValidatorFn} from '@angular/forms/src/directives/validators';
 
 export interface PostModel {

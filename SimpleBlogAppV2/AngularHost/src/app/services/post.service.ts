@@ -2,6 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {PostModel} from '../models/post-view-model';
+import {Query} from '../models/query';
+import {QueryResultPost} from '../models/query-result-post';
 
 @Injectable({providedIn: 'root'})
 export class PostService {
@@ -16,12 +18,12 @@ export class PostService {
 		return this.http.get<PostModel[]>(this.postEndpoint);
 	}
 
-	getAdminPosts(): Observable<PostModel[]> {
-		return this.http.get<PostModel[]>(`${this.postEndpoint}/admin`);
+	getAdminPosts(query: Query): Observable<QueryResultPost> {
+		return this.http.get<QueryResultPost>(`${this.postEndpoint}/admin?${this.toQueryString(query)}`);
 	}
 
-	getBlogPosts(): Observable<PostModel[]> {
-		return this.http.get<PostModel[]>(`${this.postEndpoint}/blog`);
+	getBlogPosts(query: Query): Observable<QueryResultPost> {
+		return this.http.get<QueryResultPost>(`${this.postEndpoint}/blog?${this.toQueryString(query)}`);
 	}
 
 	getPost(id: number): Observable<PostModel> {
@@ -42,5 +44,15 @@ export class PostService {
 
 	update(id: number, post: PostModel): Observable<number> {
 		return this.http.put<number>(`${this.postEndpoint}/${id}`, post);
+	}
+
+	private toQueryString(obj: any) {
+		const parts: string[] = [];
+		Object.keys(obj).forEach(prop => {
+			const val = obj[prop];
+			if (val !== null && val !== undefined)
+				parts.push(encodeURIComponent(prop) + '=' + encodeURIComponent(val));
+		});
+		return parts.join('&');
 	}
 }

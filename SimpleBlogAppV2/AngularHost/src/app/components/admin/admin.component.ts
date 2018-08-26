@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {PostModel} from '../../models/post-view-model';
 import {PostService} from '../../services/post.service';
 import '../../utils/extensions';
+import {Query} from '../../models/query';
 
 @Component({
 	selector: 'app-admin',
@@ -10,8 +11,17 @@ import '../../utils/extensions';
 })
 export class AdminComponent implements OnInit {
 
-	public totalPosts = 0;
+	public totalItems = 0;
 	public posts: PostModel[] = [];
+	query: Query = {
+		search: null,
+		searchBy: [],
+		sortBy: null,
+		isSortAscending: true,
+		page: 1,
+		pageSize: 2
+	};
+
 	public infoMessage = `Loading...`;
 
 	constructor(
@@ -37,10 +47,10 @@ export class AdminComponent implements OnInit {
 	}
 
 	private populatePosts(): void {
-		this.postService.getAdminPosts()
-			.subscribe(ps => {
-				this.totalPosts = ps.length;
-				this.posts = ps;
+		this.postService.getAdminPosts(this.query)
+			.subscribe(qr => {
+				this.totalItems = qr.totalItems;
+				this.posts = qr.items;
 				this.infoMessage = `nothing found`;
 			}, err => console.error(`Fail populating posts`, err));
 	}

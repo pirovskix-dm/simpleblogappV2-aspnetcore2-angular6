@@ -7,8 +7,8 @@ namespace SimpleBlogAppV2.BusinessLayer.Interfaces.Services
 	public interface IPostService
 	{
 		Task<IEnumerable<PostDTO>> GetAllPosts();
-		Task<IEnumerable<PostDTO>> GetAdminPosts();
-		Task<IEnumerable<PostDTO>> GetBlogPosts();
+		Task<QueryResultDTO<PostDTO>> GetAdminQueryResult(QueryObjectDTO queryObj);
+		Task<QueryResultDTO<PostDTO>> GetBlogQueryResult(QueryObjectDTO queryObj);
 		Task<PostDTO> GetPost(int id);
 		bool AddPost(PostDTO post);
 		Task<bool> UpdatePost(int id, PostDTO post);

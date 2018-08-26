@@ -4,9 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using SimpleBlogAppV2.BusinessLayer;
 using SimpleBlogAppV2.EntityFrameworkCore;
+using SimpleBlogAppV2.Logger;
 using System;
+using System.IO;
 
 namespace SimpleBlogAppV2.App
 {
@@ -35,10 +38,12 @@ namespace SimpleBlogAppV2.App
 			});
 		}
 
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
 		{
 			if (env.IsDevelopment())
 			{
+				loggerFactory.SetPath(Directory.GetCurrentDirectory());
+				loggerFactory.CreateLogger<FileLogger>();
 				app.UseDeveloperExceptionPage();
 			}
 			else

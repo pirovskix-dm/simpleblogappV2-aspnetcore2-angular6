@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {PostModel} from '../../models/post-view-model';
 import {PostService} from '../../services/post.service';
+import {Query} from '../../models/query';
 
 @Component({
 	selector: 'app-blog',
@@ -9,7 +10,16 @@ import {PostService} from '../../services/post.service';
 })
 export class BlogComponent implements OnInit {
 
+	public totalItems = 0;
 	public posts: PostModel[] = [];
+	query: Query = {
+		search: null,
+		searchBy: [],
+		sortBy: null,
+		isSortAscending: true,
+		page: 1,
+		pageSize: 2
+	};
 
 	constructor(
 		private  postService: PostService
@@ -21,9 +31,11 @@ export class BlogComponent implements OnInit {
 
 	private populatePosts(): void {
 		this.postService
-			.getPosts()
-			.subscribe(p => {
-				this.posts = p;
+			.getBlogPosts(this.query)
+			.subscribe(qr => {
+				console.log(`Populationg from service`);
+				this.totalItems = qr.totalItems;
+				this.posts = qr.items;
 			}, err => console.error(`Fail populating posts`, err));
 	}
 }

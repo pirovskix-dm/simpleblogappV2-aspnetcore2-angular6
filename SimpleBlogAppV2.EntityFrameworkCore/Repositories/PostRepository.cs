@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SimpleBlogAppV2.Core.Entities;
 using SimpleBlogAppV2.Core.Interfaces.Repositories;
+using SimpleBlogAppV2.Core.Query;
+using SimpleBlogAppV2.EntityFrameworkCore.Extensions;
 using SimpleBlogAppV2.EntityFrameworkCore.VirtualRepositories;
 using System;
 using System.Collections.Generic;
@@ -47,6 +49,33 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Repositories
 		{
 			var entry = context.Posts.Update(entity);
 			entry.Property(e => e.DateCreated).IsModified = false;
+		}
+
+		public async Task<QueryResult<T>> GetQueryResultAsync<T>(QueryObject queryObj, Expression<Func<Post, T>> exp)
+		{
+			var query = context.Posts
+				.AsQueryable();
+
+			if (!string.IsNullOrWhiteSpace(queryObj.Search))
+				query = query.ApplyStringSearching(queryObj.SearchBy, queryObj.Search);
+				
+			var countTask = query.CountAsync();
+
+			if (!string.IsNullOrWhiteSpace(queryObj.SortBy))
+				query = query.ApplyOrdering(queryObj.SortBy, queryObj.IsSortAscending);
+
+			var itemsTask = query
+				.ApplyPaging(queryObj.Page, queryObj.PageSize)
+				.Select(exp)
+				.ToListAsync();
+
+			await Task.WhenAll(countTask, itemsTask);
+
+			var result = new QueryResult<T>();
+			result.TotalItems = countTask.Result;
+			result.Items = itemsTask.Result;
+
+			return result;
 		}
 	}
 }

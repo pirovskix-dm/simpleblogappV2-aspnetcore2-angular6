@@ -2,6 +2,7 @@
 using SimpleBlogAppV2.BusinessLayer.Interfaces.Services;
 using SimpleBlogAppV2.Core.Entities;
 using SimpleBlogAppV2.Core.Interfaces.Repositories;
+using SimpleBlogAppV2.Core.Query;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -32,26 +33,58 @@ namespace SimpleBlogAppV2.BusinessLayer.Services
 			});
 		}
 
-		public async Task<IEnumerable<PostDTO>> GetAdminPosts()
+		public async Task<QueryResultDTO<PostDTO>> GetAdminQueryResult(QueryObjectDTO queryObj)
 		{
-			return await postRepository.GetAllAsync((Post p) => new PostDTO()
+			var query = new QueryObject()
+			{
+				Search = queryObj.Search,
+				SearchBy = queryObj.SearchBy,
+				SortBy = queryObj.SortBy == null ? "DateCreated" : queryObj.SortBy,
+				IsSortAscending = queryObj.IsSortAscending,
+				Page = queryObj.Page,
+				PageSize = queryObj.PageSize
+			};
+
+			var result = await postRepository.GetQueryResultAsync(query, (Post p) => new PostDTO
 			{
 				Id = p.Id,
 				Title = p.Title,
 				DateCreated = p.DateCreated,
 				DateLastUpdated = p.DateLastUpdated
 			});
+
+			return new QueryResultDTO<PostDTO>()
+			{
+				TotalItems = result.TotalItems,
+				Items = result.Items
+			};
 		}
 
-		public async Task<IEnumerable<PostDTO>> GetBlogPosts()
+		public async Task<QueryResultDTO<PostDTO>> GetBlogQueryResult(QueryObjectDTO queryObj)
 		{
-			return await postRepository.GetAllAsync((Post p) => new PostDTO()
+			var query = new QueryObject()
+			{
+				Search = null,
+				SearchBy = null,
+				SortBy = "DateCreated",
+				IsSortAscending = true,
+				Page = queryObj.Page,
+				PageSize = queryObj.PageSize
+			};
+
+			var result = await postRepository.GetQueryResultAsync(query, (Post p) => new PostDTO
 			{
 				Id = p.Id,
 				Title = p.Title,
 				ShortContent = p.ShortContent,
 				DateCreated = p.DateCreated
 			});
+
+			return new QueryResultDTO<PostDTO>()
+			{
+				TotalItems = result.TotalItems,
+				Items = result.Items
+			};
 		}
 
 		public async Task<PostDTO> GetPost(int id)
