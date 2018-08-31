@@ -35,10 +35,16 @@ namespace SimpleBlogAppV2.BusinessLayer.Services
 
 		public async Task<QueryResultDTO<PostDTO>> GetAdminQueryResult(QueryObjectDTO queryObj)
 		{
+			string[] serachBy = null;
+			if (!string.IsNullOrWhiteSpace(queryObj.Search) && !string.IsNullOrWhiteSpace(queryObj.SearchBy))
+			{
+				serachBy = queryObj.SearchBy.Split(',', StringSplitOptions.RemoveEmptyEntries);
+			}
+
 			var query = new QueryObject()
 			{
 				Search = queryObj.Search,
-				SearchBy = queryObj.SearchBy,
+				SearchBy = serachBy,
 				SortBy = queryObj.SortBy == null ? "DateCreated" : queryObj.SortBy,
 				IsSortAscending = queryObj.IsSortAscending,
 				Page = queryObj.Page,

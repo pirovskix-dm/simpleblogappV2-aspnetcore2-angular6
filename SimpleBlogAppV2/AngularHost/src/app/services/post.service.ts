@@ -19,6 +19,7 @@ export class PostService {
 	}
 
 	getAdminPosts(query: Query): Observable<QueryResultPost> {
+		console.log(`query result: `, this.toQueryString(query));
 		return this.http.get<QueryResultPost>(`${this.postEndpoint}/admin?${this.toQueryString(query)}`);
 	}
 

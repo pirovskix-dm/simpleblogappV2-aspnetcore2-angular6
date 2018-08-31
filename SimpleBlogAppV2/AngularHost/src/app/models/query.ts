@@ -1,5 +1,5 @@
 export interface Query {
-	search: string | null;
+	search: string;
 	searchBy: string[];
 	sortBy: string | null;
 	isSortAscending: boolean;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace SimpleBlogAppV2.EntityFrameworkCore.Extensions
 {
@@ -43,12 +44,11 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Extensions
 
 			var methodName = IsSortAscending ? "OrderBy" : "OrderByDescending";
 			var result = typeof(Queryable)
-				.GetMethods()
-				.First(x => x.Name == methodName && x.GetParameters().Length == 2)
+				.GetGenericMethod(methodName, new Type[] { typeof(IQueryable<object>), typeof(Expression<Func<object, object>>) })
 				.MakeGenericMethod(typeof(TEntity), property.Type)
 				.Invoke(null, new object[] { query, lambda });
 
-			return (IOrderedQueryable<TEntity>)result;
+			return result == null ? query : (IOrderedQueryable<TEntity>)result;
 		}
 
 		public static IQueryable<TEntity> ApplyStringSearching<TEntity>(this IQueryable<TEntity> query, string[] properties, string searchString)
@@ -67,7 +67,8 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Extensions
 
 			var search = Expression.Constant(searchString, typeof(string));
 			var entity = Expression.Parameter(typeof(TEntity), "e");
-			var containsMethod = typeof(String).GetMethod("Contains");
+
+			var containsMethod = typeof(String).GetGenericMethod("Contains", new Type[] { typeof(String) });
 
 			var exp = (Expression)Expression.Call(Expression.Property(entity, properties[0]), containsMethod, search);
 			for (int i = 1; i < properties.Length; i++)
@@ -77,19 +78,45 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Extensions
 			}
 
 			var lambda = Expression.Lambda(exp, entity);
-			var whereMehtods = typeof(Enumerable).GetMethods().Where(m => m.Name == "Where");
-			foreach (var m in whereMehtods)
+
+			var result = typeof(Queryable)
+				.GetGenericMethod("Where", new Type[] { typeof(IQueryable<object>), typeof(Expression<Func<object, object>>) })
+				.MakeGenericMethod(typeof(TEntity))
+				.Invoke(null, new object[] { query, lambda });
+			
+			return result == null ? query : (IQueryable<TEntity>)result;
+		}
+
+		public static MethodInfo GetGenericMethod(this Type type, string name, Type[] parametersType)
+		{
+			var parametersName = parametersType
+				.Select(p => p.Name + TypeName(p));
+
+			var method = type
+				.GetMethods()
+				.Where(m => m.Name == name && m
+					.GetParameters()
+					.Select(p => p.ParameterType)
+					.Select(p => p.Name + TypeName(p))
+					.SequenceEqual(parametersName))
+				.FirstOrDefault();
+
+			return method;
+		}
+
+		private static string TypeName(Type p)
+		{
+			var pName = String.Empty;
+			if (p.GenericTypeArguments == null || p.GenericTypeArguments.Length == 0)
+				return pName;
+
+			pName += p.GenericTypeArguments.Length.ToString();
+			foreach (var t in p.GenericTypeArguments)
 			{
-				try
-				{
-					var result = m
-						.MakeGenericMethod(typeof(TEntity))
-						.Invoke(null, new object[] { query, lambda });
-					return (IQueryable<TEntity>)result;
-				}
-				catch { }
+				pName += TypeName(t);
 			}
-			return query;
+
+			return pName;
 		}
 
 		private static bool HasProperty<T>(string[] propSequence, Type propType = null) where T : class
@@ -111,21 +138,6 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Extensions
 			return true;
 		}
 
-		private static string[] CleanSearchProperties<T>(string[] properties)
-			where T : class
-		{
-			return properties?.Where((string p) =>
-			{
-				if (string.IsNullOrWhiteSpace(p))
-					return false;
-
-				if (!HasProperty<T>(new string[] { p }, typeof(String)))
-					return false;
-
-				return true;
-			}).ToArray();
-		}
-
 		private static void CheckSearchProperties<T>(string[] properties)
 			where T : class
 		{
@@ -135,7 +147,7 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Extensions
 					throw new ArgumentException("search property cannot be null or empty.");
 
 				if (!HasProperty<T>(new string[] { p }, typeof(String)))
-					throw new ArgumentException($"Type {typeof(T).Name} does not contain {p} property of type 'String'.");
+					throw new ArgumentException($"{typeof(T).Name} does not contain {p} property of type 'String'.");
 			}
 		}
 	}

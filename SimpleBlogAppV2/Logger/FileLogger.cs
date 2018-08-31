@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -35,9 +36,12 @@ namespace SimpleBlogAppV2.Logger
 
 		public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
 		{
-			if (formatter != null)
+			if (formatter == null)
+				return;
+
+			lock (_lock)
 			{
-				lock (_lock)
+				try
 				{
 					string result = formatter(state, exception);
 					if (filter.Any(f => result.Contains(f)))
@@ -45,6 +49,7 @@ namespace SimpleBlogAppV2.Logger
 					else
 						File.AppendAllText(otherPath, result + Environment.NewLine + Environment.NewLine);
 				}
+				catch { }
 			}
 		}
 	}

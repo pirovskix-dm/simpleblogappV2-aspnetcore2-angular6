@@ -13,7 +13,7 @@ export class BlogComponent implements OnInit {
 	public totalItems = 0;
 	public posts: PostModel[] = [];
 	query: Query = {
-		search: null,
+		search: ``,
 		searchBy: [],
 		sortBy: null,
 		isSortAscending: true,
