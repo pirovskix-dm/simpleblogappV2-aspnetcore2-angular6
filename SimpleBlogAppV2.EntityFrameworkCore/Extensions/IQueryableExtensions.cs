@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -42,9 +42,13 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Extensions
 
 			var lambda = Expression.Lambda(property, entity);
 
-			var methodName = IsSortAscending ? "OrderBy" : "OrderByDescending";
-			var result = typeof(Queryable)
-				.GetGenericMethod(methodName, new Type[] { typeof(IQueryable<object>), typeof(Expression<Func<object, object>>) })
+			MethodInfo method = null;
+			if (IsSortAscending)
+				method = GetMethodInfo<IQueryable<object>>(q => q.OrderBy(o => o));
+			else
+				method = GetMethodInfo<IQueryable<object>>(q => q.OrderByDescending(o => o));
+
+			var result = method
 				.MakeGenericMethod(typeof(TEntity), property.Type)
 				.Invoke(null, new object[] { query, lambda });
 
@@ -68,7 +72,7 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Extensions
 			var search = Expression.Constant(searchString, typeof(string));
 			var entity = Expression.Parameter(typeof(TEntity), "e");
 
-			var containsMethod = typeof(String).GetGenericMethod("Contains", new Type[] { typeof(String) });
+			var containsMethod = GetMethodInfo<String>(s => s.Contains(""));
 
 			var exp = (Expression)Expression.Call(Expression.Property(entity, properties[0]), containsMethod, search);
 			for (int i = 1; i < properties.Length; i++)
@@ -78,45 +82,34 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Extensions
 			}
 
 			var lambda = Expression.Lambda(exp, entity);
-
-			var result = typeof(Queryable)
-				.GetGenericMethod("Where", new Type[] { typeof(IQueryable<object>), typeof(Expression<Func<object, object>>) })
+			var result = GetMethodInfo<IQueryable<object>>(q => q.Where(s => true))
 				.MakeGenericMethod(typeof(TEntity))
 				.Invoke(null, new object[] { query, lambda });
 			
 			return result == null ? query : (IQueryable<TEntity>)result;
 		}
 
-		public static MethodInfo GetGenericMethod(this Type type, string name, Type[] parametersType)
+		private static MethodInfo GetMethodInfo<T>(Expression<Func<T, object>> expression)
 		{
-			var parametersName = parametersType
-				.Select(p => p.Name + TypeName(p));
-
-			var method = type
-				.GetMethods()
-				.Where(m => m.Name == name && m
-					.GetParameters()
-					.Select(p => p.ParameterType)
-					.Select(p => p.Name + TypeName(p))
-					.SequenceEqual(parametersName))
-				.FirstOrDefault();
-
-			return method;
+			return GetMethodInfoFromExpression(expression.Body);
 		}
 
-		private static string TypeName(Type p)
+		private static MethodInfo GetMethodInfo<T>(Expression<Func<T, bool>> expression)
 		{
-			var pName = String.Empty;
-			if (p.GenericTypeArguments == null || p.GenericTypeArguments.Length == 0)
-				return pName;
+			return GetMethodInfoFromExpression(expression.Body);
+		}
 
-			pName += p.GenericTypeArguments.Length.ToString();
-			foreach (var t in p.GenericTypeArguments)
-			{
-				pName += TypeName(t);
-			}
+		private static MethodInfo GetMethodInfoFromExpression(Expression expression)
+		{
+			if (!(expression is MethodCallExpression))
+				return null;
 
-			return pName;
+			var mi = (expression as MethodCallExpression).Method;
+
+			if (mi.IsGenericMethod && !mi.IsGenericMethodDefinition)
+				return mi.GetGenericMethodDefinition();
+
+			return mi;
 		}
 
 		private static bool HasProperty<T>(string[] propSequence, Type propType = null) where T : class
