@@ -51,7 +51,7 @@ export class PostService {
 		const parts: string[] = [];
 		Object.keys(obj).forEach(prop => {
 			const val = obj[prop];
-			if (val !== null && val !== undefined)
+			if (val === 0 || !!val)
 				parts.push(encodeURIComponent(prop) + '=' + encodeURIComponent(val));
 		});
 		return parts.join('&');

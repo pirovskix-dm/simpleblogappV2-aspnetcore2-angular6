@@ -3,6 +3,7 @@ import {PostModel} from '../../models/post-view-model';
 import {PostService} from '../../services/post.service';
 import '../../utils/extensions';
 import {Query} from '../../models/query';
+import {TableColumn} from '../../interfaces/table-column';
 
 @Component({
 	selector: 'app-admin',
@@ -14,18 +15,21 @@ export class AdminComponent implements OnInit {
 	public totalItems = 0;
 	public posts: PostModel[] = [];
 	public searchString = ``;
-
+	public infoMessage = `Loading...`;
 	query: Query = {
 		search: ``,
 		searchBy: [`Title`, `Content`, `ShortContent`],
-		sortBy: null,
+		sortBy: ``,
 		isSortAscending: true,
 		page: 1,
 		pageSize: 100
 	};
-
-	public infoMessage = `Loading...`;
-
+	columns: TableColumn[] = [
+		{ title: `#`, key: `Id`, isSortable: true },
+		{ title: `Title`, key: `Title`, isSortable: true },
+		{ title: `Created`, key: `DateCreated`, isSortable: true },
+		{ title: `Updated`, key: `DateLastUpdated`, isSortable: true }
+	];
 	constructor(
 		private postService: PostService
 	) {
@@ -56,6 +60,18 @@ export class AdminComponent implements OnInit {
 			this.query.search = ``;
 			this.populatePosts();
 		}
+	}
+
+	public  sortBy(column: string): void {
+		if (this.query.sortBy !== column) {
+			this.query.sortBy = column;
+			this.query.isSortAscending = true;
+		} else if (!this.query.isSortAscending) {
+			this.query.sortBy = ``;
+		} else {
+			this.query.isSortAscending = !this.query.isSortAscending;
+		}
+		this.populatePosts();
 	}
 
 	private populatePosts(): void {

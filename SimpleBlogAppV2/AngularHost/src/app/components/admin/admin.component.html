@@ -15,11 +15,15 @@
 		<table *ngIf="totalItems" class="table table-hover table-condensed table-bordered">
 			<thead>
 			<tr>
-				<th scope="col">#</th>
-				<th scope="col">Title</th>
-				<th scope="col">Created</th>
-				<th scope="col">Updated</th>
-				<th scope="col"></th>
+				<th *ngFor="let c of columns" scope="col">
+					<div *ngIf="c.isSortable" (click)="sortBy(c.key)" role="button">
+						{{c.title}}
+						<i *ngIf="query.sortBy === c.key && query.isSortAscending">+</i>
+						<i *ngIf="query.sortBy === c.key && !query.isSortAscending">-</i>
+					</div>
+					<div *ngIf="!c.isSortable">{{c.title}}</div>
+				</th>
+				<th scope="col"> </th>
 			</tr>
 			</thead>
 			<tbody>
