@@ -22,7 +22,7 @@ export class AdminComponent implements OnInit {
 		sortBy: ``,
 		isSortAscending: true,
 		page: 1,
-		pageSize: 100
+		pageSize: 2
 	};
 	columns: TableColumn[] = [
 		{ title: `#`, key: `Id`, isSortable: true },
@@ -71,6 +71,11 @@ export class AdminComponent implements OnInit {
 		} else {
 			this.query.isSortAscending = !this.query.isSortAscending;
 		}
+		this.populatePosts();
+	}
+
+	public onPagination(page: number): void {
+		this.query.page = page;
 		this.populatePosts();
 	}
 

@@ -43,4 +43,11 @@
 		<p *ngIf="!totalItems">{{infoMessage}}</p>
 	</div>
 
+	<!-- Pagination -->
+	<app-pagination
+		[total-items]="totalItems"
+		[page-size]="query.pageSize"
+		[current-page]="query.page"
+		(page-changed)="onPagination($event)"
+	></app-pagination>
 </div>
