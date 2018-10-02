@@ -16,13 +16,14 @@ export class AdminComponent implements OnInit {
 	public posts: PostModel[] = [];
 	public searchString = ``;
 	public infoMessage = `Loading...`;
+	pageSizeFilter: number[] = [ 5, 10, 15, 20];
 	query: Query = {
 		search: ``,
 		searchBy: [`Title`, `Content`, `ShortContent`],
 		sortBy: ``,
 		isSortAscending: true,
 		page: 1,
-		pageSize: 2
+		pageSize: this.pageSizeFilter[0]
 	};
 	columns: TableColumn[] = [
 		{ title: `#`, key: `Id`, isSortable: true },
@@ -76,6 +77,11 @@ export class AdminComponent implements OnInit {
 
 	public onPagination(page: number): void {
 		this.query.page = page;
+		this.populatePosts();
+	}
+
+	public onPageSizeChange(): void {
+		this.query.page = 1;
 		this.populatePosts();
 	}
 

@@ -43,6 +43,13 @@
 		<p *ngIf="!totalItems">{{infoMessage}}</p>
 	</div>
 
+	<!-- Page Size -->
+	<div class="row form-group">
+		<select id="pageSize" [(ngModel)]="query.pageSize" (change)="onPageSizeChange()">
+			<option *ngFor="let size of pageSizeFilter" value="{{size}}">{{size}}</option>
+		</select>
+	</div>
+
 	<!-- Pagination -->
 	<app-pagination
 		[total-items]="totalItems"
