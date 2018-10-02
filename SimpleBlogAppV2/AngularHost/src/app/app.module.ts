@@ -12,6 +12,7 @@ import {AdminComponent} from './components/admin/admin.component';
 import {PostFormComponent} from './components/post-form/post-form.component';
 import {PostViewComponent} from './components/post-view/post-view.component';
 import {PaginationComponent} from './components/pagination/pagination.component';
+import { BlogInputComponent } from './components/extensions/blog-input/blog-input.component';
 
 import {PostService} from './services/post.service';
 
@@ -24,7 +25,8 @@ import {PostService} from './services/post.service';
 		AdminComponent,
 		PostFormComponent,
 		PostViewComponent,
-		PaginationComponent
+		PaginationComponent,
+		BlogInputComponent
 	],
 	imports: [
 		BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),

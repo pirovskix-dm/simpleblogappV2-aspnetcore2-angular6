@@ -9,12 +9,8 @@
 		</div>
 	</div>
 
-	<!-- Title -->
-	<div class="form-group">
-		<label for="title">Title</label>
-		<input id="title" type="text" class="form-control" [class.is-invalid]="viewModel.validate('title')" aria-describedby="titleHelp" formControlName="title">
-		<div class="invalid-feedback" *ngIf="viewModel.validate('title')">Required field.</div>
-	</div>
+	<!-- Test -->
+	<app-blog-input bName="title" bLabel="Title" [bViewModel]="viewModel"></app-blog-input>
 
 	<!-- Short content -->
 	<div class="form-group">
