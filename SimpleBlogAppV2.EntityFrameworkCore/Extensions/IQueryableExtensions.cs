@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -7,21 +8,29 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Extensions
 {
 	public static class IQueryableExtensions
 	{
-		public static IQueryable<TEntity> ApplyPaging<TEntity>(this IQueryable<TEntity> query, int page, int pageSize)
+		[DebuggerStepThrough]
+		public static IQueryable<TEntity> ApplyPaging<TEntity>(this IQueryable<TEntity> query, in int page, in int pageSize)
 			where TEntity : class
 		{
+			if (query == null)
+				throw new ArgumentNullException("query");
+
 			if (page < 1)
 				throw new ArgumentException("page cannot be less than 1.");
 
 			if (pageSize < 0)
 				throw new ArgumentException("page size cannot be less than 0.");
 
-
+			return _ApplyPaging(query, page, pageSize);
+		}
+		private static IQueryable<TEntity> _ApplyPaging<TEntity>(IQueryable<TEntity> query, in int page, in int pageSize)
+		{
 			query = page == 1 ? query : query.Skip((page - 1) * pageSize);
 			return query.Take(pageSize);
 		}
 
-		public static IQueryable<TEntity> ApplyOrdering<TEntity>(this IQueryable<TEntity> query, string propertyString, bool IsSortAscending)
+		[DebuggerStepThrough]
+		public static IQueryable<TEntity> ApplyOrdering<TEntity>(this IQueryable<TEntity> query, string propertyString, in bool IsSortAscending)
 			where TEntity : class
 		{
 			if (query == null)
@@ -34,6 +43,10 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Extensions
 			if (!HasProperty<TEntity>(propSequence))
 				throw new ArgumentException($"Type {typeof(TEntity).Name} does not contain {propertyString} property.");
 
+			return _ApplyOrdering(query, propSequence, IsSortAscending);
+		}
+		private static IQueryable<TEntity> _ApplyOrdering<TEntity>(IQueryable<TEntity> query, string[] propSequence, in bool IsSortAscending)
+		{
 			var entity = Expression.Parameter(typeof(TEntity), "x");
 			var property = Expression.Property(entity, propSequence[0]);
 
@@ -55,6 +68,7 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Extensions
 			return result == null ? query : (IOrderedQueryable<TEntity>)result;
 		}
 
+		[DebuggerStepThrough]
 		public static IQueryable<TEntity> ApplyStringSearching<TEntity>(this IQueryable<TEntity> query, string[] properties, string searchString)
 			where TEntity : class
 		{
@@ -69,6 +83,10 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Extensions
 
 			CheckSearchProperties<TEntity>(properties);
 
+			return _ApplyStringSearching(query, properties, searchString);
+		}
+		public static IQueryable<TEntity> _ApplyStringSearching<TEntity>(IQueryable<TEntity> query, string[] properties, string searchString)
+		{
 			var search = Expression.Constant(searchString, typeof(string));
 			var entity = Expression.Parameter(typeof(TEntity), "e");
 
@@ -85,7 +103,7 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Extensions
 			var result = GetMethodInfo<IQueryable<object>>(q => q.Where(s => true))
 				.MakeGenericMethod(typeof(TEntity))
 				.Invoke(null, new object[] { query, lambda });
-			
+
 			return result == null ? query : (IQueryable<TEntity>)result;
 		}
 
@@ -131,6 +149,7 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Extensions
 			return true;
 		}
 
+		[DebuggerStepThrough]
 		private static void CheckSearchProperties<T>(string[] properties)
 			where T : class
 		{

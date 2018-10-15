@@ -1,5 +1,6 @@
 ﻿using SimpleBlogAppV2.Core.Interfaces.Repositories;
 using SimpleBlogAppV2.EntityFrameworkCore.VirtualRepositories;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SimpleBlogAppV2.EntityFrameworkCore.Repositories
@@ -12,9 +13,9 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Repositories
 
 		}
 
-		public async Task SaveAsync()
+		public async Task SaveAsync(CancellationToken cancellationToken = default)
 		{
-			await context.SaveChangesAsync();
+			await context.SaveChangesAsync(cancellationToken);
 		}
 	}
 }

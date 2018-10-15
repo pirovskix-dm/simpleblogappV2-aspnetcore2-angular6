@@ -1,3 +1,6 @@
+using FluentValidation.AspNetCore;
+using MediatR;
+using MediatR.Pipeline;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +9,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SimpleBlogAppV2.BusinessLayer;
+using SimpleBlogAppV2.BusinessLayer.Commands;
+using SimpleBlogAppV2.BusinessLayer.Commands.PostCommands;
 using SimpleBlogAppV2.EntityFrameworkCore;
+using SimpleBlogAppV2.Filters;
 using SimpleBlogAppV2.Logger;
 using System;
 using System.IO;
@@ -30,7 +36,19 @@ namespace SimpleBlogAppV2.App
 
 			services.AddServices();
 
-			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
+			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
+			services.AddMediatR();
+
+			services
+				.AddMvc(o => o.Filters.Add(typeof(CustomExceptionFilterAttribute)))
+				.SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+				.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreatePostCommandValidator>());
+
+			services.Configure<ApiBehaviorOptions>(options =>
+			{
+				options.SuppressModelStateInvalidFilter = true;
+			});
 
 			services.AddSpaStaticFiles(configuration =>
 			{

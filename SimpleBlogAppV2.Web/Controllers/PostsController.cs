@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using SimpleBlogAppV2.BusinessLayer.Commands.PostCommands;
 using SimpleBlogAppV2.BusinessLayer.DTO;
 using SimpleBlogAppV2.BusinessLayer.Interfaces.Services;
-using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace SimpleBlogAppV2.Web.Controllers
@@ -14,11 +15,13 @@ namespace SimpleBlogAppV2.Web.Controllers
 	{
 		private readonly IUnitOfWorkService unitOfWork;
 		private readonly IPostService postService;
+		private readonly IMediator mediator;
 
-		public PostsController(IUnitOfWorkService unitOfWork, IPostService postService)
+		public PostsController(IUnitOfWorkService unitOfWork, IPostService postService, IMediator mediator)
 		{
 			this.unitOfWork = unitOfWork;
 			this.postService = postService;
+			this.mediator = mediator;
 		}
 
 		[HttpGet]
@@ -28,31 +31,25 @@ namespace SimpleBlogAppV2.Web.Controllers
 		}
 
 		[HttpGet("blog")]
+		[ProducesResponseType(typeof(QueryResultDTO<PostDTO>), (int)HttpStatusCode.OK)]
 		public async Task<IActionResult> GetBlogPosts(QueryObjectDTO query)
 		{
-			try
-			{
-				var result = await postService.GetBlogQueryResult(query);
-				return Ok(result);
-			}
-			catch (Exception ex)
-			{
-				return StatusCode(StatusCodes.Status500InternalServerError, ex);
-			}
+			if (query is null)
+				return BadRequest();
+
+			var result = await postService.GetBlogQueryResult(query);
+			return Ok(result);
 		}
 
 		[HttpGet("admin")]
+		[ProducesResponseType(typeof(QueryResultDTO<PostDTO>), (int)HttpStatusCode.OK)]
 		public async Task<IActionResult> GetAdminPosts(QueryObjectDTO query)
 		{
-			try
-			{
-				var result = await postService.GetAdminQueryResult(query);
-				return Ok(result);
-			}
-			catch (Exception ex)
-			{
-				return StatusCode(StatusCodes.Status500InternalServerError, ex);
-			}
+			if (query is null)
+				return BadRequest();
+
+			var result = await postService.GetAdminQueryResult(query);
+			return Ok(result);
 		}
 
 		[HttpGet("default")]
@@ -62,66 +59,45 @@ namespace SimpleBlogAppV2.Web.Controllers
 		}
 
 		[HttpGet("{id}")]
+		[ProducesResponseType(typeof(PostDTO), (int)HttpStatusCode.OK)]
 		public async Task<IActionResult> GetPost([FromRoute] int id)
 		{
-			try
-			{
-				var result = await postService.GetPost(id);
-				if (result == null)
-					return NotFound();
-				return Ok(result);
-			}
-			catch (Exception ex)
-			{
-				return StatusCode(StatusCodes.Status500InternalServerError, ex);
-			}
+			var result = await postService.GetPost(id);
+			return Ok(result);
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> CreatePost([FromBody] PostDTO savePost)
+		[ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
+		public async Task<IActionResult> CreatePost([FromBody] CreatePostCommand createCommand)
 		{
-			return await CreateOrUpdatePost(null, savePost);
+			return Ok(await mediator.Send(createCommand));
 		}
 
 		[HttpPut("{id}")]
+		[ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
 		public async Task<IActionResult> UpdatePost([FromRoute] int id, [FromBody] PostDTO savePost)
 		{
 			return await CreateOrUpdatePost(id, savePost);
 		}
 
 		[HttpDelete("{id}")]
+		[ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
 		public async Task<IActionResult> DeletePost([FromRoute] int id)
 		{
-			try
-			{
-				postService.RemovePost(id);
-				await unitOfWork.SaveChangesAsync();
-				return Ok(id);
-			}
-			catch (Exception ex)
-			{
-				return StatusCode(StatusCodes.Status500InternalServerError, ex);
-			}
+			postService.RemovePost(id);
+			await unitOfWork.SaveChangesAsync();
+			return Ok(id);
 		}
 
 		private async Task<IActionResult> CreateOrUpdatePost(int? id, PostDTO savePost)
 		{
-			if (!ModelState.IsValid)
+			if (savePost is null || !ModelState.IsValid)
 				return BadRequest(ModelState);
+			
+			await postService.AddOrUpdatePost(id, savePost);
+			await unitOfWork.SaveChangesAsync();
 
-			try
-			{
-				bool success = await postService.AddOrUpdatePost(id, savePost);
-				if (!success)
-					return NotFound();
-
-				await unitOfWork.SaveChangesAsync();
-				return Ok(postService.GetProcessedPostId());
-			}
-			catch (Exception ex)
-			{
-				return StatusCode(StatusCodes.Status500InternalServerError, ex);
-			}
+			return Ok(postService.GetProcessedPostId());
 		}
 	}
 }

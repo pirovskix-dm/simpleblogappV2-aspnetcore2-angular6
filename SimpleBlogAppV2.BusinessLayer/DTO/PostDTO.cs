@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace SimpleBlogAppV2.BusinessLayer.DTO
 {
@@ -7,14 +6,14 @@ namespace SimpleBlogAppV2.BusinessLayer.DTO
 	{
 		public int Id { get; set; }
 
-		[Required]
-		[StringLength(100)]
+		//[Required]
+		//[StringLength(100)]
 		public string Title { get; set; }
 
-		[Required]
+		//[Required]
 		public string Content { get; set; }
 
-		[StringLength(500)]
+		//[StringLength(500)]
 		public string ShortContent { get; set; }
 
 		public DateTime? DateCreated { get; set; }

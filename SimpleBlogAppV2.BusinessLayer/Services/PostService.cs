@@ -1,4 +1,5 @@
 ﻿using SimpleBlogAppV2.BusinessLayer.DTO;
+using SimpleBlogAppV2.BusinessLayer.Exceptions;
 using SimpleBlogAppV2.BusinessLayer.Interfaces.Services;
 using SimpleBlogAppV2.Core.Entities;
 using SimpleBlogAppV2.Core.Interfaces.Repositories;
@@ -106,7 +107,7 @@ namespace SimpleBlogAppV2.BusinessLayer.Services
 			});
 		}
 
-		public bool AddPost(PostDTO savePost)
+		public void AddPost(PostDTO savePost)
 		{
 			var post = new Post()
 			{
@@ -120,14 +121,13 @@ namespace SimpleBlogAppV2.BusinessLayer.Services
 			processedPost = post;
 
 			postRepository.Add(post);
-			return true;
 		}
 
-		public async Task<bool> UpdatePost(int id, PostDTO savePost)
+		public async Task UpdatePost(int id, PostDTO savePost)
 		{
 			var post = await postRepository.GetAsync(id, p => p);
 			if (post == null)
-				return false;
+				throw new BlogNotFoundException("Post", id);
 
 			post.Title = savePost.Title;
 			post.ShortContent = savePost.ShortContent;
@@ -137,8 +137,6 @@ namespace SimpleBlogAppV2.BusinessLayer.Services
 			processedPost = post;
 
 			postRepository.Update(post);
-
-			return true;
 		}
 
 		public bool RemovePost(int id)
@@ -149,9 +147,12 @@ namespace SimpleBlogAppV2.BusinessLayer.Services
 			return true;
 		}
 
-		public async Task<bool> AddOrUpdatePost(int? id, PostDTO savePost)
+		public async Task AddOrUpdatePost(int? id, PostDTO savePost)
 		{
-			return id.HasValue ? await UpdatePost(id.Value, savePost) : AddPost(savePost);
+			if (id.HasValue)
+				await UpdatePost(id.Value, savePost);
+			else
+				AddPost(savePost);
 		}
 
 		public int GetProcessedPostId()

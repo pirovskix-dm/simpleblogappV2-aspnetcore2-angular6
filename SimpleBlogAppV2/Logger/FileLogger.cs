@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -8,7 +7,6 @@ namespace SimpleBlogAppV2.Logger
 {
 	public class FileLogger : ILogger
 	{
-		private readonly string path;
 		private readonly string sqlPath;
 		private readonly string otherPath;
 		private object _lock = new object();
