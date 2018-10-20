@@ -1,9 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SimpleBlogAppV2.BusinessLayer.Commands.PostCommands;
+using SimpleBlogAppV2.BusinessLayer.Commands.PostCommands.Create;
+using SimpleBlogAppV2.BusinessLayer.Commands.PostCommands.Delete;
+using SimpleBlogAppV2.BusinessLayer.Commands.PostCommands.Get;
+using SimpleBlogAppV2.BusinessLayer.Commands.PostCommands.Update;
+using SimpleBlogAppV2.BusinessLayer.Commands.QueryCommands.GetAdminQuery;
+using SimpleBlogAppV2.BusinessLayer.Commands.QueryCommands.GetBlogQuery;
 using SimpleBlogAppV2.BusinessLayer.DTO;
-using SimpleBlogAppV2.BusinessLayer.Interfaces.Services;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -13,91 +16,56 @@ namespace SimpleBlogAppV2.Web.Controllers
 	[Route("api/posts")]
 	public class PostsController : Controller
 	{
-		private readonly IUnitOfWorkService unitOfWork;
-		private readonly IPostService postService;
 		private readonly IMediator mediator;
 
-		public PostsController(IUnitOfWorkService unitOfWork, IPostService postService, IMediator mediator)
+		public PostsController(IMediator mediator)
 		{
-			this.unitOfWork = unitOfWork;
-			this.postService = postService;
 			this.mediator = mediator;
-		}
-
-		[HttpGet]
-		public async Task<IEnumerable<PostDTO>> GetPosts()
-		{
-			return await postService.GetAllPosts();
 		}
 
 		[HttpGet("blog")]
 		[ProducesResponseType(typeof(QueryResultDTO<PostDTO>), (int)HttpStatusCode.OK)]
-		public async Task<IActionResult> GetBlogPosts(QueryObjectDTO query)
+		public async Task<IActionResult> GetBlogPosts(GetBlogQueryCommand command)
 		{
-			if (query is null)
-				return BadRequest();
-
-			var result = await postService.GetBlogQueryResult(query);
-			return Ok(result);
+			return Ok(await mediator.Send(command));
 		}
 
 		[HttpGet("admin")]
 		[ProducesResponseType(typeof(QueryResultDTO<PostDTO>), (int)HttpStatusCode.OK)]
-		public async Task<IActionResult> GetAdminPosts(QueryObjectDTO query)
+		public async Task<IActionResult> GetAdminPosts(GetAdminQueryCommand command)
 		{
-			if (query is null)
-				return BadRequest();
-
-			var result = await postService.GetAdminQueryResult(query);
-			return Ok(result);
-		}
-
-		[HttpGet("default")]
-		public IActionResult GetDefaultPost()
-		{
-			return Ok(new PostDTO());
+			return Ok(await mediator.Send(command));
 		}
 
 		[HttpGet("{id}")]
 		[ProducesResponseType(typeof(PostDTO), (int)HttpStatusCode.OK)]
 		public async Task<IActionResult> GetPost([FromRoute] int id)
 		{
-			var result = await postService.GetPost(id);
-			return Ok(result);
+			var command = new GetPostCommand() { Id = id };
+			return Ok(await mediator.Send(command));
 		}
 
 		[HttpPost]
 		[ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
-		public async Task<IActionResult> CreatePost([FromBody] CreatePostCommand createCommand)
+		public async Task<IActionResult> CreatePost([FromBody] CreatePostCommand command)
 		{
-			return Ok(await mediator.Send(createCommand));
+			return Ok(await mediator.Send(command));
 		}
 
 		[HttpPut("{id}")]
 		[ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
-		public async Task<IActionResult> UpdatePost([FromRoute] int id, [FromBody] PostDTO savePost)
+		public async Task<IActionResult> UpdatePost([FromRoute] int id, [FromBody] UpdatePostCommand command)
 		{
-			return await CreateOrUpdatePost(id, savePost);
+			command.Id = id; // TODO
+			return Ok(await mediator.Send(command));
 		}
 
 		[HttpDelete("{id}")]
 		[ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
 		public async Task<IActionResult> DeletePost([FromRoute] int id)
 		{
-			postService.RemovePost(id);
-			await unitOfWork.SaveChangesAsync();
-			return Ok(id);
-		}
-
-		private async Task<IActionResult> CreateOrUpdatePost(int? id, PostDTO savePost)
-		{
-			if (savePost is null || !ModelState.IsValid)
-				return BadRequest(ModelState);
-			
-			await postService.AddOrUpdatePost(id, savePost);
-			await unitOfWork.SaveChangesAsync();
-
-			return Ok(postService.GetProcessedPostId());
+			var command = new DeletePostCommand() { Id = id };
+			return Ok(await mediator.Send(command));
 		}
 	}
 }
