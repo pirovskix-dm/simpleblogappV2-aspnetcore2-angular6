@@ -21,7 +21,7 @@ namespace SimpleBlogAppV2.BusinessLayer.Commands.PostCommands.Update
 
 		public async Task<int> Handle(UpdatePostCommand request, CancellationToken cancellationToken)
 		{
-			var post = await postRepository.GetAsync(request.Id, p => p);
+			var post = await postRepository.GetAsync(request.Id, cancellationToken, p => p);
 			if (post == null)
 				throw new BlogNotFoundException("Post", request.Id);
 

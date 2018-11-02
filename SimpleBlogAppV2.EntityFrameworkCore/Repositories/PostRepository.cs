@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SimpleBlogAppV2.EntityFrameworkCore.Repositories
@@ -20,19 +21,19 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Repositories
 
 		}
 
-		public async Task<IEnumerable<T>> GetAllAsync<T>(Expression<Func<Post, T>> exp)
+		public async Task<IEnumerable<T>> GetAllAsync<T>(CancellationToken ct, Expression<Func<Post, T>> exp)
 		{
 			return await context.Posts
 				.Select(exp)
-				.ToListAsync();
+				.ToListAsync(ct);
 		}
 
-		public async Task<T> GetAsync<T>(int id, Expression<Func<Post, T>> exp)
+		public async Task<T> GetAsync<T>(int id, CancellationToken ct, Expression<Func<Post, T>> exp)
 		{
 			return await context.Posts
 				.Where(p => p.Id == id)
 				.Select(exp)
-				.FirstOrDefaultAsync();
+				.FirstOrDefaultAsync(ct);
 		}
 
 		public void Add(Post entity)
@@ -51,7 +52,7 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Repositories
 			entry.Property(e => e.DateCreated).IsModified = false;
 		}
 
-		public async Task<QueryResult<T>> GetQueryResultAsync<T>(QueryObject queryObj, Expression<Func<Post, T>> exp)
+		public async Task<QueryResult<T>> GetQueryResultAsync<T>(QueryObject queryObj, CancellationToken ct, Expression<Func<Post, T>> exp)
 		{
 			var query = context.Posts
 				.AsQueryable();
@@ -59,7 +60,7 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Repositories
 			if (!string.IsNullOrWhiteSpace(queryObj.Search))
 				query = query.ApplyStringSearching(queryObj.SearchBy, queryObj.Search);
 				
-			var countTask = query.CountAsync();
+			var countTask = query.CountAsync(ct);
 
 			if (!string.IsNullOrWhiteSpace(queryObj.SortBy))
 				query = query.ApplyOrdering(queryObj.SortBy, queryObj.IsSortAscending);
@@ -67,7 +68,7 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Repositories
 			var itemsTask = query
 				.ApplyPaging(queryObj.Page, queryObj.PageSize)
 				.Select(exp)
-				.ToListAsync();
+				.ToListAsync(ct);
 
 			await Task.WhenAll(countTask, itemsTask);
 

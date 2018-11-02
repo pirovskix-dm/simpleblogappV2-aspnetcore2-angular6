@@ -21,7 +21,7 @@ namespace SimpleBlogAppV2.BusinessLayer.Commands.QueryCommands.GetAdminQuery
 			this.unitOfWork = unitOfWork;
 		}
 
-		public async Task<QueryResultDTO<PostDTO>> Handle(GetAdminQueryCommand request, CancellationToken cancellationToken)
+		public async Task<QueryResultDTO<PostDTO>> Handle(GetAdminQueryCommand request, CancellationToken ct)
 		{
 			string[] serachBy = null;
 			if (!string.IsNullOrWhiteSpace(request.Search) && !string.IsNullOrWhiteSpace(request.SearchBy))
@@ -39,7 +39,7 @@ namespace SimpleBlogAppV2.BusinessLayer.Commands.QueryCommands.GetAdminQuery
 				PageSize = request.PageSize
 			};
 
-			var result = await postRepository.GetQueryResultAsync(query, (Post p) => new PostDTO
+			var result = await postRepository.GetQueryResultAsync(query, ct,(Post p) => new PostDTO
 			{
 				Id = p.Id,
 				Title = p.Title,

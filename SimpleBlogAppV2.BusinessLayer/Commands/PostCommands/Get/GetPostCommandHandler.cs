@@ -20,9 +20,9 @@ namespace SimpleBlogAppV2.BusinessLayer.Commands.PostCommands.Get
 			this.unitOfWork = unitOfWork;
 		}
 
-		public async Task<PostDTO> Handle(GetPostCommand request, CancellationToken cancellationToken)
+		public async Task<PostDTO> Handle(GetPostCommand request, CancellationToken ct)
 		{
-			var result = await postRepository.GetAsync(request.Id, (Post p) => new PostDTO()
+			var result = await postRepository.GetAsync(request.Id, ct, (Post p) => new PostDTO()
 			{
 				Id = p.Id,
 				Title = p.Title,

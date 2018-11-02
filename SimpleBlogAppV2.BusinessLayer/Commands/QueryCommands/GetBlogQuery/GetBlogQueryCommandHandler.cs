@@ -21,7 +21,7 @@ namespace SimpleBlogAppV2.BusinessLayer.Commands.QueryCommands.GetBlogQuery
 			this.unitOfWork = unitOfWork;
 		}
 
-		public async Task<QueryResultDTO<PostDTO>> Handle(GetBlogQueryCommand request, CancellationToken cancellationToken)
+		public async Task<QueryResultDTO<PostDTO>> Handle(GetBlogQueryCommand request, CancellationToken ct)
 		{
 			var query = new QueryObject()
 			{
@@ -33,7 +33,7 @@ namespace SimpleBlogAppV2.BusinessLayer.Commands.QueryCommands.GetBlogQuery
 				PageSize = request.PageSize
 			};
 
-			var result = await postRepository.GetQueryResultAsync(query, (Post p) => new PostDTO
+			var result = await postRepository.GetQueryResultAsync(query, ct, (Post p) => new PostDTO
 			{
 				Id = p.Id,
 				Title = p.Title,
