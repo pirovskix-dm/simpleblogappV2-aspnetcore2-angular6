@@ -10,6 +10,7 @@ namespace SimpleBlogAppV2.EntityFrameworkCore
 		public static void UseEntityFramework(this IServiceCollection services, string connectionString)
 		{
 			services.AddScoped<IPostRepository, EfPostRepository>();
+			services.AddScoped<ICategoryRepository, EfCategoryRepository>();
 			services.AddScoped<IUnitOfWork, EfUnitOfWork>();
 
 			services

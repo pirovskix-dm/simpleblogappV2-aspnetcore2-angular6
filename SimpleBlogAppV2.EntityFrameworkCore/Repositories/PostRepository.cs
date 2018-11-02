@@ -24,6 +24,7 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Repositories
 		public async Task<IEnumerable<T>> GetAllAsync<T>(CancellationToken ct, Expression<Func<Post, T>> exp)
 		{
 			return await context.Posts
+				.Include(p => p.Category)
 				.Select(exp)
 				.ToListAsync(ct);
 		}
@@ -31,6 +32,7 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Repositories
 		public async Task<T> GetAsync<T>(int id, CancellationToken ct, Expression<Func<Post, T>> exp)
 		{
 			return await context.Posts
+				.Include(p => p.Category)
 				.Where(p => p.Id == id)
 				.Select(exp)
 				.FirstOrDefaultAsync(ct);

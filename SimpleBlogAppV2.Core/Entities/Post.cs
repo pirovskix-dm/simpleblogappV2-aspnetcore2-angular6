@@ -12,5 +12,8 @@ namespace SimpleBlogAppV2.Core.Entities
 		public string Content { get; set; }
 
 		public string ShortContent { get; set; }
+
+		public int? CategoryId { get; set; }
+		public Category Category { get; set; }
 	}
 }
