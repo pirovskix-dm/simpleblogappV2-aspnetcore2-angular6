@@ -29,6 +29,7 @@ namespace SimpleBlogAppV2.BusinessLayer.Commands.PostCommands.Update
 			post.ShortContent = request.ShortContent;
 			post.Content = request.Content;
 			post.DateLastUpdated = DateTime.UtcNow;
+			post.CategoryId = request.Category == null ? (int?)null : request.Category.Id;
 
 			postRepository.Update(post);
 			await unitOfWork.SaveAsync(cancellationToken);

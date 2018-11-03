@@ -1,10 +1,13 @@
 ﻿using MediatR;
 using SimpleBlogAppV2.BusinessLayer.DTO;
 using SimpleBlogAppV2.BusinessLayer.Exceptions;
+using SimpleBlogAppV2.BusinessLayer.Utils;
 using SimpleBlogAppV2.Core.Entities;
 using SimpleBlogAppV2.Core.Interfaces.Repositories;
 using SimpleBlogAppV2.Core.Query;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,16 +26,11 @@ namespace SimpleBlogAppV2.BusinessLayer.Commands.QueryCommands.GetAdminQuery
 
 		public async Task<QueryResultDTO<PostDTO>> Handle(GetAdminQueryCommand request, CancellationToken ct)
 		{
-			string[] serachBy = null;
-			if (!string.IsNullOrWhiteSpace(request.Search) && !string.IsNullOrWhiteSpace(request.SearchBy))
-			{
-				serachBy = request.SearchBy.Split(',', StringSplitOptions.RemoveEmptyEntries);
-			}
-
 			var query = new QueryObject()
 			{
 				Search = request.Search,
-				SearchBy = serachBy,
+				SearchBy = QueryParser.ParseSearch(request.SearchBy),
+				Filters = QueryParser.ParseFilter(request.Filters),
 				SortBy = request.SortBy == null ? "DateCreated" : request.SortBy,
 				IsSortAscending = request.IsSortAscending,
 				Page = request.Page,

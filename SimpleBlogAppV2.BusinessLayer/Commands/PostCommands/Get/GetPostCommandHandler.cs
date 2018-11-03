@@ -29,7 +29,12 @@ namespace SimpleBlogAppV2.BusinessLayer.Commands.PostCommands.Get
 				ShortContent = p.ShortContent,
 				Content = p.Content,
 				DateCreated = p.DateCreated,
-				DateLastUpdated = p.DateLastUpdated
+				DateLastUpdated = p.DateLastUpdated,
+				Category = p.Category == null ? null : new CategoryDTO()
+				{
+					Id = p.Category.Id,
+					Name = p.Category.Name
+				}
 			});
 
 			if (result == null)

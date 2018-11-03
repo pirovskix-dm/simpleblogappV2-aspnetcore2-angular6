@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
@@ -81,11 +82,18 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Extensions
 			if (properties == null || properties.Length == 0)
 				throw new ArgumentException("search properties array cannot be null or empty.");
 
-			CheckSearchProperties<TEntity>(properties);
+			foreach (var p in properties)
+			{
+				if (string.IsNullOrWhiteSpace(p))
+					throw new ArgumentException("search property cannot be null or empty.");
+
+				if (!HasProperty<TEntity>(new string[] { p }, typeof(String)))
+					throw new ArgumentException($"{typeof(TEntity).Name} does not contain {p} property of type 'String'.");
+			}
 
 			return _ApplyStringSearching(query, properties, searchString);
 		}
-		public static IQueryable<TEntity> _ApplyStringSearching<TEntity>(IQueryable<TEntity> query, string[] properties, string searchString)
+		private static IQueryable<TEntity> _ApplyStringSearching<TEntity>(IQueryable<TEntity> query, string[] properties, string searchString)
 		{
 			var search = Expression.Constant(searchString, typeof(string));
 			var entity = Expression.Parameter(typeof(TEntity), "e");
@@ -106,6 +114,56 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Extensions
 
 			return result == null ? query : (IQueryable<TEntity>)result;
 		}
+
+		[DebuggerStepThrough]
+		public static IQueryable<TEntity> ApplyFiltering<TEntity>(this IQueryable<TEntity> query, Dictionary<string, int> filters)
+			where TEntity : class
+		{
+			if (query == null)
+				throw new ArgumentNullException("query");
+
+			if (filters == null)
+				throw new ArgumentNullException("filters"); ;
+
+			if (filters.Count == 0)
+				throw new ArgumentException("filters count can not be null.");
+
+			foreach (var f in filters)
+			{
+				if (!HasProperty<TEntity>(new string[] { f.Key }))
+					throw new ArgumentException($"{typeof(TEntity).Name} does not contain {f.Key} property of type 'String'.");
+			}
+
+			return _ApplyFiltering(query, filters);
+		}
+		private static IQueryable<TEntity> _ApplyFiltering<TEntity>(IQueryable<TEntity> query, Dictionary<string, int> filters)
+		{
+			var entity = Expression.Parameter(typeof(TEntity), "e");
+			var equalsMethod = GetMethodInfo<int>(i => i.Equals(0));
+
+			Expression exp = null;
+			foreach (var f in filters)
+			{
+				var filterId = Expression.Constant(f.Value, typeof(int));
+				if (exp == null)
+				{
+					exp = Expression.Call(Expression.Property(entity, f.Key), equalsMethod, filterId);
+				}
+				else
+				{
+					var mExp = Expression.Call(Expression.Property(entity, f.Key), equalsMethod, filterId);
+					exp = (Expression)Expression.And(exp, mExp);
+				}
+			}
+
+			var lambda = Expression.Lambda(exp, entity);
+			var result = GetMethodInfo<IQueryable<object>>(q => q.Where(s => true))
+				.MakeGenericMethod(typeof(TEntity))
+				.Invoke(null, new object[] { query, lambda });
+
+			return result == null ? query : (IQueryable<TEntity>)result;
+		}
+
 
 		private static MethodInfo GetMethodInfo<T>(Expression<Func<T, object>> expression)
 		{
@@ -147,20 +205,6 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Extensions
 				return false;
 
 			return true;
-		}
-
-		[DebuggerStepThrough]
-		private static void CheckSearchProperties<T>(string[] properties)
-			where T : class
-		{
-			foreach(var p in properties)
-			{
-				if (string.IsNullOrWhiteSpace(p))
-					throw new ArgumentException("search property cannot be null or empty.");
-
-				if (!HasProperty<T>(new string[] { p }, typeof(String)))
-					throw new ArgumentException($"{typeof(T).Name} does not contain {p} property of type 'String'.");
-			}
 		}
 	}
 }

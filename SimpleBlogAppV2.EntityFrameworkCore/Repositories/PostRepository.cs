@@ -57,11 +57,15 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Repositories
 		public async Task<QueryResult<T>> GetQueryResultAsync<T>(QueryObject queryObj, CancellationToken ct, Expression<Func<Post, T>> exp)
 		{
 			var query = context.Posts
+				.Include(p => p.Category)
 				.AsQueryable();
 
 			if (!string.IsNullOrWhiteSpace(queryObj.Search))
 				query = query.ApplyStringSearching(queryObj.SearchBy, queryObj.Search);
-				
+
+			if (queryObj.Filters != null)
+				query = query.ApplyFiltering(queryObj.Filters);
+
 			var countTask = query.CountAsync(ct);
 
 			if (!string.IsNullOrWhiteSpace(queryObj.SortBy))

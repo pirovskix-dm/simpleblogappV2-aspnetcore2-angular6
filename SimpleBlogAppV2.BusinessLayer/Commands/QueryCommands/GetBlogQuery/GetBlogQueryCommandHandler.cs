@@ -27,6 +27,7 @@ namespace SimpleBlogAppV2.BusinessLayer.Commands.QueryCommands.GetBlogQuery
 			{
 				Search = null,
 				SearchBy = null,
+				Filters = null,
 				SortBy = "DateCreated",
 				IsSortAscending = true,
 				Page = request.Page,
@@ -37,6 +38,7 @@ namespace SimpleBlogAppV2.BusinessLayer.Commands.QueryCommands.GetBlogQuery
 			{
 				Id = p.Id,
 				Title = p.Title,
+				Category = p.Category == null ? null : new CategoryDTO() { Id = p.Category.Id, Name = p.Category.Name },
 				ShortContent = p.ShortContent,
 				DateCreated = p.DateCreated
 			});

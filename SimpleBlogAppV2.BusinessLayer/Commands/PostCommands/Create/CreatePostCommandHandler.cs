@@ -26,7 +26,8 @@ namespace SimpleBlogAppV2.BusinessLayer.Commands.PostCommands.Create
 				Content = request.Content,
 				ShortContent = request.ShortContent,
 				DateCreated = DateTime.UtcNow,
-				DateLastUpdated = DateTime.UtcNow
+				DateLastUpdated = DateTime.UtcNow,
+				CategoryId = request.Category == null ? (int?)null : request.Category.Id
 			};
 
 			postRepository.Add(post);

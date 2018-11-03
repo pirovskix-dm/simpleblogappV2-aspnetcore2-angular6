@@ -16,6 +16,8 @@ namespace SimpleBlogAppV2.BusinessLayer.DTO
 		//[StringLength(500)]
 		public string ShortContent { get; set; }
 
+		public CategoryDTO Category { get; set; }
+
 		public DateTime? DateCreated { get; set; }
 
 		public DateTime? DateLastUpdated { get; set; }
