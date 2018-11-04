@@ -1,5 +1,6 @@
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ValidatorFn} from '@angular/forms/src/directives/validators';
+import {CategoryModel} from './category-view-model';
 
 export interface PostModel {
 	id: number;
@@ -8,6 +9,7 @@ export interface PostModel {
 	shortContent: string | null;
 	dateCreated: string | null;
 	dateLastUpdated: string | null;
+	category: CategoryModel | null;
 }
 
 export class PostViewModel {
@@ -18,10 +20,11 @@ export class PostViewModel {
 		shortContent: ``,
 		content: ``,
 		dateCreated: ``,
-		dateLastUpdated: ``
+		dateLastUpdated: ``,
+		category: null
 	};
 	private model: any;
-	private form: FormGroup;
+	private readonly form: FormGroup;
 
 	constructor(
 	) {
@@ -30,6 +33,7 @@ export class PostViewModel {
 		this.createControl(`title`, [Validators.required, Validators.maxLength(100)]);
 		this.createControl(`shortContent`, Validators.maxLength(500));
 		this.createControl(`content`, Validators.required);
+		this.createControl(`category`);
 	}
 
 	public get(field: string): any {
@@ -61,7 +65,7 @@ export class PostViewModel {
 
 	private createControl(field: string, validator?: ValidatorFn | ValidatorFn[] | null): void {
 		const control = new FormControl(this.model[field], validator);
-		control.valueChanges.subscribe((v: string) => this.model[field] = v);
+		control.valueChanges.subscribe((v: any) => this.model[field] = v);
 		this.form.addControl(field, control);
 	}
 }

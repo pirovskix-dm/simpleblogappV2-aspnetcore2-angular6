@@ -20,6 +20,7 @@ export class AdminComponent implements OnInit {
 	query: Query = {
 		search: ``,
 		searchBy: [`Title`, `Content`, `ShortContent`],
+		filters: [],
 		sortBy: ``,
 		isSortAscending: true,
 		page: 1,

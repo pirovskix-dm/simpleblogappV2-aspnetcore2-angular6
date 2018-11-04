@@ -8,9 +8,7 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using SimpleBlogAppV2.BusinessLayer;
 using SimpleBlogAppV2.BusinessLayer.Commands;
-using SimpleBlogAppV2.BusinessLayer.Commands.PostCommands;
 using SimpleBlogAppV2.BusinessLayer.Commands.PostCommands.Create;
 using SimpleBlogAppV2.EntityFrameworkCore;
 using SimpleBlogAppV2.Filters;
@@ -33,7 +31,7 @@ namespace SimpleBlogAppV2.App
 
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.UseEntityFramework(@"Data Source=DEV-PC4;Initial Catalog=SimpleBlogAppV2;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+			services.UseEntityFramework(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=SimpleBlogAppV2DB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
 
 			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
 			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));

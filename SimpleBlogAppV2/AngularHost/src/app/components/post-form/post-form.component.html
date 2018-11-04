@@ -9,7 +9,7 @@
 		</div>
 	</div>
 
-	<!-- Test -->
+	<!-- Title -->
 	<app-blog-input bName="title" bLabel="Title" [bViewModel]="viewModel"></app-blog-input>
 
 	<!-- Short content -->
@@ -24,6 +24,14 @@
 		<label for="content">Content</label>
 		<textarea id="content" class="form-control" [class.is-invalid]="viewModel.validate('content')" aria-describedby="contentHelp" rows="5" formControlName="content"></textarea>
 		<div class="invalid-feedback" *ngIf="viewModel.validate('content')">Required field.</div>
+	</div>
+
+	<!-- Category -->
+	<div class="form-group">
+		<label for="category">category</label>
+		<select id="category" class="form-control" formControlName="category">
+			<option *ngFor="let c of categories" [ngValue]="c" [selected]="isCategorySelected(c)">{{c.name}}</option>
+		</select>
 	</div>
 
 	<!-- Date created -->

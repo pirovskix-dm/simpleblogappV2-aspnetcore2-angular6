@@ -19,11 +19,30 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("SimpleBlogAppV2.Core.Entities.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime?>("DateCreated");
+
+                    b.Property<DateTime?>("DateLastUpdated");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Category");
+                });
+
             modelBuilder.Entity("SimpleBlogAppV2.Core.Entities.Post", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CategoryId");
 
                     b.Property<string>("Content");
 
@@ -31,15 +50,23 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Migrations
 
                     b.Property<DateTime?>("DateLastUpdated");
 
-                    b.Property<string>("ShortContent")
-                        .HasMaxLength(500);
+                    b.Property<string>("ShortContent");
 
-                    b.Property<string>("Title")
-                        .HasMaxLength(100);
+                    b.Property<string>("Title");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.ToTable("Post");
+                });
+
+            modelBuilder.Entity("SimpleBlogAppV2.Core.Entities.Post", b =>
+                {
+                    b.HasOne("SimpleBlogAppV2.Core.Entities.Category", "Category")
+                        .WithMany("Posts")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 #pragma warning restore 612, 618
         }

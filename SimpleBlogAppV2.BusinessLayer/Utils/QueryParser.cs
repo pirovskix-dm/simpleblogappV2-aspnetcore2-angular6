@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 
 namespace SimpleBlogAppV2.BusinessLayer.Utils
 {
@@ -10,6 +9,9 @@ namespace SimpleBlogAppV2.BusinessLayer.Utils
 		[DebuggerStepThrough]
 		public static Dictionary<string, int> ParseFilter(string filters)
 		{
+			if (string.IsNullOrWhiteSpace(filters))
+				return null;
+
 			var result = new Dictionary<string, int>();
 
 			string[] pairs = filters.Split(',', StringSplitOptions.RemoveEmptyEntries);

@@ -15,6 +15,7 @@ export class BlogComponent implements OnInit {
 	query: Query = {
 		search: ``,
 		searchBy: [],
+		filters: [],
 		sortBy: ``,
 		isSortAscending: true,
 		page: 1,

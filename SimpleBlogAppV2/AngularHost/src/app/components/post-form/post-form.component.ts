@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {PostViewModel} from '../../models/post-view-model';
 import {PostService} from '../../services/post.service';
 import {ActivatedRoute, Router} from '@angular/router';
+import {CategoryModel} from '../../models/category-view-model';
+import {CategoryService} from '../../services/category.service';
 
 @Component({
 	selector: 'app-post-form',
@@ -13,9 +15,11 @@ export class PostFormComponent implements OnInit {
 	public id = 0;
 	public pageTitle = '';
 	public viewModel: PostViewModel;
+	public categories: CategoryModel[] = [];
 
 	constructor(
 		private postService: PostService,
+		private categoryService: CategoryService,
 		private route: ActivatedRoute,
 		private router: Router
 	) {
@@ -27,8 +31,11 @@ export class PostFormComponent implements OnInit {
 			this.id = +p['id'] || 0;
 			this.pageTitle = this.id ? 'Edit Post' : 'Create Post';
 
-			if (this.id > 1)
-				this.populatePost();
+			this.populateForm().then().catch(err => {
+				console.error(`Fail populating form: `, err.message ? err.message : err);
+				this.router.navigate(['/admin']).then();
+			});
+
 		});
 	}
 
@@ -53,6 +60,13 @@ export class PostFormComponent implements OnInit {
 		return date.toDDMMYYYY(`.`);
 	}
 
+	public isCategorySelected(category: CategoryModel | null): boolean {
+		if (!category || !this.viewModel.get(`category`))
+			return false;
+
+		return category.id === this.viewModel.get(`category`).id;
+	}
+
 	private updatePost(): void {
 		this.postService
 			.update(this.id, this.viewModel.Model)
@@ -74,15 +88,10 @@ export class PostFormComponent implements OnInit {
 				err => console.error(`Fail updating posts`, err));
 	}
 
-	private populatePost(): void {
-		this.postService
-			.getPost(this.id)
-			.subscribe(post => {
-					this.viewModel.Model = post;
-				}, err => {
-					console.error(`Fail populating posts`, err);
-					this.router.navigate(['/admin']);
-				});
+	private async populateForm(): Promise<void> {
+		this.categories = await this.categoryService.getCategoriesAsync();
+		if (this.id > 1)
+			this.viewModel.Model = await this.postService.getPostAsync(this.id);
 	}
 }
 

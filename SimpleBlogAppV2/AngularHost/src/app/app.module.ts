@@ -12,9 +12,10 @@ import {AdminComponent} from './components/admin/admin.component';
 import {PostFormComponent} from './components/post-form/post-form.component';
 import {PostViewComponent} from './components/post-view/post-view.component';
 import {PaginationComponent} from './components/pagination/pagination.component';
-import { BlogInputComponent } from './components/extensions/blog-input/blog-input.component';
+import {BlogInputComponent} from './components/extensions/blog-input/blog-input.component';
 
 import {PostService} from './services/post.service';
+import {CategoryService} from './services/category.service';
 
 @NgModule({
 	declarations: [
@@ -44,7 +45,7 @@ import {PostService} from './services/post.service';
 			{path: '**', redirectTo: ''}
 		])
 	],
-	providers: [PostService],
+	providers: [PostService, CategoryService],
 	bootstrap: [AppComponent]
 })
 export class AppModule {

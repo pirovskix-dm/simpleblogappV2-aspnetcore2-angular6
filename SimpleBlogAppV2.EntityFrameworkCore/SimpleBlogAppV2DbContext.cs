@@ -13,5 +13,15 @@ namespace SimpleBlogAppV2.EntityFrameworkCore
 		{
 
 		}
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			base.OnModelCreating(modelBuilder);
+
+			modelBuilder.Entity<Category>()
+				.HasMany(c => c.Posts)
+				.WithOne(p => p.Category)
+				.OnDelete(DeleteBehavior.SetNull);
+		}
 	}
 }
