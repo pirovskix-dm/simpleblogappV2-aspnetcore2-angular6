@@ -131,7 +131,7 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Extensions
 			foreach (var f in filters)
 			{
 				if (!HasProperty<TEntity>(new string[] { f.Key }))
-					throw new ArgumentException($"{typeof(TEntity).Name} does not contain {f.Key} property of type 'String'.");
+					throw new ArgumentException($"{typeof(TEntity).Name} does not contain {f.Key} property.");
 			}
 
 			return _ApplyFiltering(query, filters);
@@ -139,19 +139,26 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Extensions
 		private static IQueryable<TEntity> _ApplyFiltering<TEntity>(IQueryable<TEntity> query, Dictionary<string, int> filters)
 		{
 			var entity = Expression.Parameter(typeof(TEntity), "e");
-			var equalsMethod = GetMethodInfo<int>(i => i.Equals(0));
+			MethodInfo equalsMethod = null;
 
 			Expression exp = null;
 			foreach (var f in filters)
 			{
+				equalsMethod = typeof(TEntity)
+					.GetProperty(f.Key + "Id")
+					.PropertyType
+					.GetMethod("Equals", new[] { typeof(object) });
+
 				var filterId = Expression.Constant(f.Value, typeof(int));
+				var convertFilt = Expression.Convert(filterId, typeof(object));
+				var prop = Expression.Property(entity, f.Key + "Id");
 				if (exp == null)
 				{
-					exp = Expression.Call(Expression.Property(entity, f.Key), equalsMethod, filterId);
+					exp = Expression.Call(prop, equalsMethod, convertFilt);
 				}
 				else
 				{
-					var mExp = Expression.Call(Expression.Property(entity, f.Key), equalsMethod, filterId);
+					var mExp = Expression.Call(prop, equalsMethod, convertFilt);
 					exp = (Expression)Expression.And(exp, mExp);
 				}
 			}

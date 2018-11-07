@@ -4,6 +4,8 @@ import {PostService} from '../../services/post.service';
 import '../../utils/extensions';
 import {Query} from '../../models/query';
 import {TableColumn} from '../../interfaces/table-column';
+import {CategoryService} from '../../services/category.service';
+import {CategoryModel} from '../../models/category-view-model';
 
 @Component({
 	selector: 'app-admin',
@@ -14,9 +16,11 @@ export class AdminComponent implements OnInit {
 
 	public totalItems = 0;
 	public posts: PostModel[] = [];
+	public categories: CategoryModel[] = [];
 	public searchString = ``;
 	public infoMessage = `Loading...`;
-	pageSizeFilter: number[] = [ 5, 10, 15, 20];
+	pageSizeFilter: number[] = [ 5, 10, 15, 20 ];
+	filters: any = {};
 	query: Query = {
 		search: ``,
 		searchBy: [`Title`, `Content`, `ShortContent`],
@@ -33,12 +37,14 @@ export class AdminComponent implements OnInit {
 		{ title: `Updated`, key: `DateLastUpdated`, isSortable: true }
 	];
 	constructor(
-		private postService: PostService
+		private postService: PostService,
+		private categoryService: CategoryService
 	) {
 	}
 
 	public ngOnInit(): void {
 		this.populatePosts();
+		this.populateCategories();
 	}
 
 	public dateFormat(date: string | null): string {
@@ -86,12 +92,34 @@ export class AdminComponent implements OnInit {
 		this.populatePosts();
 	}
 
+	public onCategoriesFilterChange(): void {
+		this.populatePosts();
+	}
+
+	private createFilter(): string[] {
+		const newFilters: string[] = [];
+		for(let prop in this.filters) {
+			const val = this.filters[prop];
+			if (val)
+				newFilters.push(encodeURIComponent(prop) + ':' + encodeURIComponent(val));
+		}
+		return newFilters;
+	}
+
 	private populatePosts(): void {
+		this.query.filters = this.createFilter();
 		this.postService.getAdminPosts(this.query)
 			.subscribe(qr => {
 				this.totalItems = qr.totalItems;
 				this.posts = qr.items;
 				this.infoMessage = `nothing found`;
 			}, err => console.error(`Fail populating posts: ${err.error.Message}`, err));
+	}
+
+	private populateCategories(): void {
+		this.categoryService.getCategories()
+			.subscribe(cs => {
+				this.categories = cs;
+			}, err => console.error(`Fail populating categories: ${err.error.Message}`, err));
 	}
 }

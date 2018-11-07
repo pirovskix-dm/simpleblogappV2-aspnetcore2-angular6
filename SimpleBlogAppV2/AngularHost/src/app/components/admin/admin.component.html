@@ -1,3 +1,5 @@
+{{filters | json}}
+
 <div class="container">
 	<h2>Admin</h2>
 
@@ -9,6 +11,15 @@
 	<div class="form-group">
 		Search: <input type="text" id="search_post" [(ngModel)]="searchString" (keyup)="onSearch()">
 	</div>
+
+    <!-- Category filter -->
+    <div class="form-group">
+        <label for="category">Category</label>
+        <select id="category" class="form-control" [(ngModel)]="filters['category']" (change)="onCategoriesFilterChange()">
+            <option value=""></option>
+            <option *ngFor="let c of categories" value="{{c.id}}">{{c.name}}</option>
+        </select>
+    </div>
 
 	<!-- Table -->
 	<div class="row">

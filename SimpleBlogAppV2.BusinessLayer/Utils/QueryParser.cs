@@ -24,7 +24,7 @@ namespace SimpleBlogAppV2.BusinessLayer.Utils
 				if (valueKey.Length != 2)
 					throw new ArgumentException("Invalid filter key `" + pair + "`");
 
-				TryAddToDictionary(result, valueKey[0], valueKey[1]);
+				TryAddToDictionary(result, valueKey[0].FirstLetterToUpperCase(), valueKey[1]);
 			}
 
 			return result;
@@ -50,6 +50,17 @@ namespace SimpleBlogAppV2.BusinessLayer.Utils
 				throw new ArgumentException("Invalid filter value");
 
 			d.Add(key, intValue);
+		}
+
+		[DebuggerStepThrough]
+		public static string FirstLetterToUpperCase(this string s)
+		{
+			if (string.IsNullOrWhiteSpace(s))
+				return s;
+
+			char[] a = s.ToCharArray();
+			a[0] = char.ToUpper(a[0]);
+			return new string(a);
 		}
 	}
 }
