@@ -1,0 +1,5 @@
+<div *ngIf="bViewModel!==null" class="form-group" [formGroup]="bViewModel.Form">
+    <label for={{bName}}>{{bLabel}}</label>
+    <textarea id={{bName}} class="form-control" [class.is-invalid]="validateControl()" rows={{bRows}} formControlName={{bName}}></textarea>
+    <div class="invalid-feedback" *ngIf="validateControl()">Required field.</div>
+</div>

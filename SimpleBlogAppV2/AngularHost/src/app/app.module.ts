@@ -13,6 +13,8 @@ import {PostFormComponent} from './components/post-form/post-form.component';
 import {PostViewComponent} from './components/post-view/post-view.component';
 import {PaginationComponent} from './components/pagination/pagination.component';
 import {BlogInputComponent} from './components/extensions/blog-input/blog-input.component';
+import {BlogTextareaComponent} from './components/extensions/blog-textarea/blog-textarea.component';
+import {BlogTextComponent} from './components/extensions/blog-text/blog-text.component';
 
 import {PostService} from './services/post.service';
 import {CategoryService} from './services/category.service';
@@ -27,7 +29,9 @@ import {CategoryService} from './services/category.service';
 		PostFormComponent,
 		PostViewComponent,
 		PaginationComponent,
-		BlogInputComponent
+		BlogInputComponent,
+		BlogTextareaComponent,
+		BlogTextComponent
 	],
 	imports: [
 		BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),

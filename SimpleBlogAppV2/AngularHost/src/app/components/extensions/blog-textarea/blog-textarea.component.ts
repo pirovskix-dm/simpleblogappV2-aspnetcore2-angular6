@@ -2,17 +2,19 @@ import {Component, Input, OnChanges} from '@angular/core';
 import {PostViewModel} from '../../../models/post-view-model';
 
 @Component({
-	selector: 'app-blog-input',
-	templateUrl: './blog-input.component.html',
-	styleUrls: ['./blog-input.component.css']
+	selector: 'app-blog-textarea',
+	templateUrl: './blog-textarea.component.html',
+	styleUrls: ['./blog-textarea.component.css']
 })
-export class BlogInputComponent implements OnChanges {
+export class BlogTextareaComponent implements OnChanges {
 	@Input(`bName`) bName = ``;
 	@Input(`bLabel`) bLabel = ``;
+	@Input(`bRows`) bRows = `3`;
 	@Input(`bViewModel`) bViewModel: PostViewModel | null = null;
 
 	constructor() {
 	}
+
 	public ngOnChanges(): void {
 
 	}

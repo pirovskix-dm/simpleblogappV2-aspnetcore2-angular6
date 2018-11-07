@@ -2,29 +2,16 @@
 
 <form class="post-form" [formGroup]="viewModel.Form" (ngSubmit)="onSubmit()">
 	<!-- Id -->
-	<div *ngIf="id" class="form-group row">
-		<label for="postId" class="col-sm-2 col-form-label">Id:</label>
-		<div class="col-sm-10">
-			<input id="postId" type="text" readonly class="form-control-plaintext" value="{{id}}">
-		</div>
-	</div>
+    <app-blog-text bName="postId" bLabel="Id:" bValue="{{id}}"></app-blog-text>
 
 	<!-- Title -->
 	<app-blog-input bName="title" bLabel="Title" [bViewModel]="viewModel"></app-blog-input>
 
 	<!-- Short content -->
-	<div class="form-group">
-		<label for="shortContent">Short content</label>
-		<textarea id="shortContent" class="form-control" [class.is-invalid]="viewModel.validate('shortContent')" rows="3" formControlName="shortContent"></textarea>
-		<div class="invalid-feedback" *ngIf="viewModel.validate('shortContent')">Required field.</div>
-	</div>
+    <app-blog-textarea bName="shortContent" bLabel="Short content" [bViewModel]="viewModel" bRows="3"></app-blog-textarea>
 
 	<!-- Content -->
-	<div class="form-group">
-		<label for="content">Content</label>
-		<textarea id="content" class="form-control" [class.is-invalid]="viewModel.validate('content')" aria-describedby="contentHelp" rows="5" formControlName="content"></textarea>
-		<div class="invalid-feedback" *ngIf="viewModel.validate('content')">Required field.</div>
-	</div>
+    <app-blog-textarea bName="content" bLabel="Content" [bViewModel]="viewModel" bRows="5"></app-blog-textarea>
 
 	<!-- Category -->
 	<div class="form-group">
