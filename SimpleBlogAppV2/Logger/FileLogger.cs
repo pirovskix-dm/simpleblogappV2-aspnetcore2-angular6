@@ -11,7 +11,7 @@ namespace SimpleBlogAppV2.Logger
 		private readonly string otherPath;
 		private object _lock = new object();
 
-		private string[] filter = { "SELECT", "SET", "INSERT", "GET", "POST", "PUT", "DELETE" };
+		private string[] filter = { "SELECT", "SET", "INSERT", "GET", "POST", "PUT", "DELETE", "LINQ", "expression", "Request finished" };
 
 		public FileLogger(string path)
 		{

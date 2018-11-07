@@ -29,7 +29,7 @@ namespace SimpleBlogAppV2.BusinessLayer.Commands.QueryCommands.GetBlogQuery
 				SearchBy = null,
 				Filters = null,
 				SortBy = "DateCreated",
-				IsSortAscending = true,
+				IsSortAscending = false,
 				Page = request.Page,
 				PageSize = request.PageSize
 			};

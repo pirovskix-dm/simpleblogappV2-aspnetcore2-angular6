@@ -139,26 +139,19 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Extensions
 		private static IQueryable<TEntity> _ApplyFiltering<TEntity>(IQueryable<TEntity> query, Dictionary<string, int> filters)
 		{
 			var entity = Expression.Parameter(typeof(TEntity), "e");
-			MethodInfo equalsMethod = null;
-
 			Expression exp = null;
 			foreach (var f in filters)
 			{
-				equalsMethod = typeof(TEntity)
-					.GetProperty(f.Key + "Id")
-					.PropertyType
-					.GetMethod("Equals", new[] { typeof(object) });
-
-				var filterId = Expression.Constant(f.Value, typeof(int));
-				var convertFilt = Expression.Convert(filterId, typeof(object));
+				var propType = typeof(TEntity).GetProperty(f.Key + "Id").PropertyType;
+				var filterId = Expression.Constant(f.Value, propType);
 				var prop = Expression.Property(entity, f.Key + "Id");
 				if (exp == null)
 				{
-					exp = Expression.Call(prop, equalsMethod, convertFilt);
+					exp = Expression.Equal(prop, filterId);
 				}
 				else
 				{
-					var mExp = Expression.Call(prop, equalsMethod, convertFilt);
+					var mExp = Expression.Equal(prop, filterId);
 					exp = (Expression)Expression.And(exp, mExp);
 				}
 			}
