@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SimpleBlogAppV2.Core.Entities;
+using SimpleBlogAppV2.Core.VirtualEntities;
+using System.Linq;
 
 namespace SimpleBlogAppV2.EntityFrameworkCore
 {
@@ -11,7 +13,7 @@ namespace SimpleBlogAppV2.EntityFrameworkCore
 		public SimpleBlogAppV2DbContext(DbContextOptions<SimpleBlogAppV2DbContext> options)
 			: base(options)
 		{
-
+			Database.Migrate();
 		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -22,6 +24,23 @@ namespace SimpleBlogAppV2.EntityFrameworkCore
 				.HasMany(c => c.Posts)
 				.WithOne(p => p.Category)
 				.OnDelete(DeleteBehavior.SetNull);
+
+			var entityTypes = modelBuilder
+				.Model
+				.GetEntityTypes()
+				.Where(e => typeof(BaseEntity).IsAssignableFrom(e.ClrType));
+
+			foreach (var entityType in entityTypes)
+			{
+				modelBuilder
+					.Entity(entityType.ClrType)
+					.Property(nameof(BaseEntity.DateCreated))
+					.HasDefaultValueSql("GETDATE()");
+				modelBuilder
+					.Entity(entityType.ClrType)
+					.Property(nameof(BaseEntity.DateLastUpdated))
+					.HasDefaultValueSql("GETDATE()");
+			}
 		}
 	}
 }

@@ -4,6 +4,7 @@ import {PostService} from '../../services/post.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CategoryModel} from '../../models/category-view-model';
 import {CategoryService} from '../../services/category.service';
+import {DatePipe} from '@angular/common';
 
 @Component({
 	selector: 'app-post-form',
@@ -57,7 +58,11 @@ export class PostFormComponent implements OnInit {
 	}
 
 	public dateFormat(date: string): string {
-		return date.toDDMMYYYY(`.`);
+		if (!date) {
+			return ``;
+		}
+
+		return new DatePipe(`en-US`).transform(date, `dd.MM.yyyy`) || ``;
 	}
 
 	public isCategorySelected(category: CategoryModel | null): boolean {

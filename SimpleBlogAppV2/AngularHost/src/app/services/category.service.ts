@@ -33,12 +33,6 @@ export class CategoryService {
 	}
 
 	public getCategoriesAsync(): Promise<CategoryModel[]> {
-		return new Promise<CategoryModel[]>((resolve, reject) => {
-			this.getCategories().subscribe( result => {
-				resolve(result);
-			}, err => {
-				reject(err);
-			});
-		});
+		return this.getCategories().toPromise();
 	}
 }

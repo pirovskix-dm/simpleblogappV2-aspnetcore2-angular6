@@ -1,10 +1,12 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {PostModel} from '../models/post-view-model';
 import {Query} from '../models/query';
 import {QueryResultPost} from '../models/query-result-post';
 import {CategoryModel} from '../models/category-view-model';
+import '../utils/extensions';
+import * as _ from 'underscore';
 
 @Injectable({providedIn: 'root'})
 export class PostService {
@@ -19,12 +21,15 @@ export class PostService {
 		return this.http.get<PostModel[]>(this.postEndpoint);
 	}
 
-	public getAdminPosts(query: Query): Observable<QueryResultPost> {
-		return this.http.get<QueryResultPost>(`${this.postEndpoint}/admin?${this.toQueryString(query)}`);
+	public getAdminPostsAsync(query: Query): Promise<QueryResultPost> {
+		return this
+			.http
+			.get<QueryResultPost>(`${this.postEndpoint}/admin`, {params: this.getParams(query)})
+			.toPromise();
 	}
 
 	public getBlogPosts(query: Query): Observable<QueryResultPost> {
-		return this.http.get<QueryResultPost>(`${this.postEndpoint}/blog?${this.toQueryString(query)}`);
+		return this.http.get<QueryResultPost>(`${this.postEndpoint}/blog`, {params: this.getParams(query)});
 	}
 
 	public getPost(id: number): Observable<PostModel> {
@@ -48,35 +53,32 @@ export class PostService {
 	}
 
 	public getPostAsync(id: number): Promise<PostModel> {
-		return new Promise<PostModel>((resolve, reject) => {
-			this.getPost(id).subscribe(result => {
-				resolve(result);
-			}, err => {
-				reject(err);
-			});
-		});
+		return this.getPost(id).toPromise();
 	}
 
-	private toQueryString(query: Query) {
-		const parts: string[] = [];
+	private getParams(query: Query): HttpParams {
+		let params = new HttpParams();
 
-		if (query.search) {
-			parts.push(encodeURIComponent(`search`) + `=` + encodeURIComponent(query.search));
-			parts.push(encodeURIComponent(`searchBy`) + `=` + encodeURIComponent(query.searchBy.toString()));
+		if (_.isUndefined(query) || _.isNull(query))
+			return params;
+
+		if (!query.search.isBlank()) {
+			params = params.append(`search`, query.search);
+			params = params.append(`searchBy`, query.searchBy.toString());
 		}
 
 		if (query.filters && query.filters.length > 0) {
-			parts.push(encodeURIComponent(`filters`) + `=` + encodeURIComponent(query.filters.toString()));
+			params = params.append(`filters`, query.filters.toString());
 		}
 
-		if (query.sortBy) {
-			parts.push(encodeURIComponent(`sortBy`) + `=` + encodeURIComponent(query.sortBy));
-			parts.push(encodeURIComponent(`isSortAscending`) + `=` + encodeURIComponent(query.isSortAscending.toString()));
+		if (!query.sortBy.isBlank()) {
+			params = params.append(`sortBy`, query.sortBy);
+			params = params.append(`isSortAscending`, query.isSortAscending.toString());
 		}
 
-		parts.push(encodeURIComponent(`page`) + `=` + encodeURIComponent(query.page.toString()));
-		parts.push(encodeURIComponent(`pageSize`) + `=` + encodeURIComponent(query.pageSize.toString()));
+		params = params.append(`page`, query.page.toString());
+		params = params.append(`pageSize`, query.pageSize.toString());
 
-		return parts.join('&');
+		return params;
 	}
 }

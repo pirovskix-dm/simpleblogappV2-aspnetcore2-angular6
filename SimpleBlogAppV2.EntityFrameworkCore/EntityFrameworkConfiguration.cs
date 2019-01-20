@@ -13,8 +13,10 @@ namespace SimpleBlogAppV2.EntityFrameworkCore
 			services.AddScoped<ICategoryRepository, EfCategoryRepository>();
 			services.AddScoped<IUnitOfWork, EfUnitOfWork>();
 
-			services
-				.AddDbContext<SimpleBlogAppV2DbContext>(options => options.UseSqlServer(connectionString));
+			services.AddDbContext<SimpleBlogAppV2DbContext>(options => 
+			{
+				options.UseSqlServer(connectionString, b => b.MigrationsAssembly(typeof(SimpleBlogAppV2DbContext).Namespace));
+			});
 		}
 	}
 }

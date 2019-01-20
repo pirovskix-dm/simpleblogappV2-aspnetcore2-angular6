@@ -6,6 +6,7 @@ import {Query} from '../../models/query';
 import {TableColumn} from '../../interfaces/table-column';
 import {CategoryService} from '../../services/category.service';
 import {CategoryModel} from '../../models/category-view-model';
+import {DatePipe} from '@angular/common';
 
 @Component({
 	selector: 'app-admin',
@@ -43,30 +44,31 @@ export class AdminComponent implements OnInit {
 	}
 
 	public ngOnInit(): void {
-		this.populatePosts();
+		this.populatePostsAsync();
 		this.populateCategories();
 	}
 
 	public dateFormat(date: string | null): string {
-		if (date === null) {
+		if (!date) {
 			return ``;
 		}
-		return date.toDDMMYYYY(`.`);
+
+		return new DatePipe(`en-US`).transform(date, `dd.MM.yyyy`) || ``;
 	}
 
-	public delete(id: number): void {
+	public async delete(id: number): Promise<any> {
 		this.postService.delete(id).subscribe(i => {
-			this.populatePosts();
+			this.populatePostsAsync();
 		}, err => console.error(`Fail deleting posts: ${err.error.Message}`, err));
 	}
 
 	public onSearch(): void {
 		if (this.searchString.length > 3) {
 			this.query.search = this.searchString;
-			this.populatePosts();
+			this.populatePostsAsync();
 		} else if (this.query.search.length > 3) {
 			this.query.search = ``;
-			this.populatePosts();
+			this.populatePostsAsync();
 		}
 	}
 
@@ -79,26 +81,26 @@ export class AdminComponent implements OnInit {
 		} else {
 			this.query.isSortAscending = !this.query.isSortAscending;
 		}
-		this.populatePosts();
+		this.populatePostsAsync();
 	}
 
 	public onPagination(page: number): void {
 		this.query.page = page;
-		this.populatePosts();
+		this.populatePostsAsync();
 	}
 
 	public onPageSizeChange(): void {
 		this.query.page = 1;
-		this.populatePosts();
+		this.populatePostsAsync();
 	}
 
 	public onCategoriesFilterChange(): void {
-		this.populatePosts();
+		this.populatePostsAsync();
 	}
 
 	private createFilter(): string[] {
 		const newFilters: string[] = [];
-		for(let prop in this.filters) {
+		for (let prop in this.filters) {
 			const val = this.filters[prop];
 			if (val)
 				newFilters.push(encodeURIComponent(prop) + ':' + encodeURIComponent(val));
@@ -106,14 +108,13 @@ export class AdminComponent implements OnInit {
 		return newFilters;
 	}
 
-	private populatePosts(): void {
+	private async populatePostsAsync(): Promise<void> {
 		this.query.filters = this.createFilter();
-		this.postService.getAdminPosts(this.query)
-			.subscribe(qr => {
-				this.totalItems = qr.totalItems;
-				this.posts = qr.items;
-				this.infoMessage = `nothing found`;
-			}, err => console.error(`Fail populating posts: ${err.error.Message}`, err));
+
+		const result = await this.postService.getAdminPostsAsync(this.query);
+		this.totalItems = result.totalItems;
+		this.posts = result.items;
+		this.infoMessage = `nothing found`;
 	}
 
 	private populateCategories(): void {

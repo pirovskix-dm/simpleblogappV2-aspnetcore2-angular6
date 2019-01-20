@@ -1,27 +1,30 @@
-interface Date {
-	toDDMMYYYY(separator: string): string;
-}
+import * as _ from 'underscore';
 
-interface String {
-	toDDMMYYYY(separator: string): string;
-}
-
-Date.prototype.toDDMMYYYY = function(separator: string): string {
-	const d: Date = this;
-	let day: string = d.getDate().toString();
-	let month: string = (d.getMonth() + 1).toString();
-	const year: string = d.getFullYear().toString();
-	day = day.length < 2 ? `0` + day : day;
-	month = month.length < 2 ? `0` + month : month;
-	return [ day, month, year ].join(separator);
-};
-
-String.prototype.toDDMMYYYY = function(separator: string): string {
-	const date: number = Date.parse(this.toString());
-	if (!date) {
-		return '';
+declare global {
+	interface String {
+		isBlank(): boolean;
 	}
-	return new Date(date).toDDMMYYYY(separator);
+}
+
+String.prototype.isBlank = function(): boolean {
+	const value = String(this);
+
+	if (!value)
+		return true;
+
+	if (_.isUndefined(value))
+		return true;
+
+	if (_.isNull(value))
+		return true;
+
+	if (_.isEmpty(value.trim()))
+		return true;
+
+	if (!!value.match(/^\s*$/))
+		return true;
+
+	return false;
 };
 
 
