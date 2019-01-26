@@ -22,20 +22,16 @@ export class PostViewComponent implements OnInit {
 		this.post = new PostViewModel();
 	}
 
-	public ngOnInit() {
-		this.route.params.subscribe(p => {
-			this.id = +p['id'] || 0;
-			this.populatePost();
-		});
-	}
+	public async ngOnInit() {
+		const params = await this.route.snapshot.params;
+		this.id = +params['id'] || 0;
 
-	private populatePost(): void {
-		this.postService.getPost(this.id)
-			.subscribe(post => {
-				this.post.Model = post;
-			}, err => {
-				this.pageNotFound = true;
-			});
+		try {
+			this.post.Model = await this.postService.getPostAsync(this.id);
+		} catch (err) {
+			console.error(err.message);
+			this.pageNotFound = true;
+		}
 	}
 
 }

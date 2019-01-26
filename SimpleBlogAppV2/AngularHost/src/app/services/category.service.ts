@@ -12,27 +12,38 @@ export class CategoryService {
 
 	}
 
-	public getCategories(): Observable<CategoryModel[]> {
-		return this.http.get<CategoryModel[]>(`${this.categoryEndpoint}/all`);
-	}
-
-	public getCategory(id: number): Observable<CategoryModel> {
-		return this.http.get<CategoryModel>(`${this.categoryEndpoint}/${id}`);
-	}
-
-	public create(post: CategoryModel): Observable<number> {
-		return this.http.post<number>(this.categoryEndpoint, post);
-	}
-
-	public delete(id: number): Observable<number> {
-		return this.http.delete<number>(`${this.categoryEndpoint}/${id}`);
-	}
-
-	public update(id: number, post: CategoryModel): Observable<number> {
-		return this.http.put<number>(`${this.categoryEndpoint}/${id}`, post);
-	}
-
 	public getCategoriesAsync(): Promise<CategoryModel[]> {
-		return this.getCategories().toPromise();
+		return this
+			.http
+			.get<CategoryModel[]>(`${this.categoryEndpoint}/all`)
+			.toPromise();
+	}
+
+	public getCategoryAsync(id: number): Promise<CategoryModel> {
+		return this
+			.http
+			.get<CategoryModel>(`${this.categoryEndpoint}/${id}`)
+			.toPromise();
+	}
+
+	public createAsync(post: CategoryModel): Promise<number> {
+		return this
+			.http
+			.post<number>(this.categoryEndpoint, post)
+			.toPromise();
+	}
+
+	public deleteAsync(id: number): Promise<number> {
+		return this
+			.http
+			.delete<number>(`${this.categoryEndpoint}/${id}`)
+			.toPromise();
+	}
+
+	public updateAsync(id: number, post: CategoryModel): Promise<number> {
+		return this
+			.http
+			.put<number>(`${this.categoryEndpoint}/${id}`, post)
+			.toPromise();
 	}
 }

@@ -45,7 +45,7 @@ export class AdminComponent implements OnInit {
 
 	public ngOnInit(): void {
 		this.populatePostsAsync();
-		this.populateCategories();
+		this.populateCategoriesAsync();
 	}
 
 	public dateFormat(date: string | null): string {
@@ -56,10 +56,9 @@ export class AdminComponent implements OnInit {
 		return new DatePipe(`en-US`).transform(date, `dd.MM.yyyy`) || ``;
 	}
 
-	public async delete(id: number): Promise<any> {
-		this.postService.delete(id).subscribe(i => {
-			this.populatePostsAsync();
-		}, err => console.error(`Fail deleting posts: ${err.error.Message}`, err));
+	public async deleteAsync(id: number): Promise<void> {
+		await this.postService.deleteAsync(id);
+		await this.populatePostsAsync();
 	}
 
 	public onSearch(): void {
@@ -72,7 +71,7 @@ export class AdminComponent implements OnInit {
 		}
 	}
 
-	public  sortBy(column: string): void {
+	public sortBy(column: string): void {
 		if (this.query.sortBy !== column) {
 			this.query.sortBy = column;
 			this.query.isSortAscending = true;
@@ -117,10 +116,7 @@ export class AdminComponent implements OnInit {
 		this.infoMessage = `nothing found`;
 	}
 
-	private populateCategories(): void {
-		this.categoryService.getCategories()
-			.subscribe(cs => {
-				this.categories = cs;
-			}, err => console.error(`Fail populating categories: ${err.error.Message}`, err));
+	private async populateCategoriesAsync(): Promise<void> {
+		this.categories = await this.categoryService.getCategoriesAsync();
 	}
 }

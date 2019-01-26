@@ -27,17 +27,17 @@ export class PostFormComponent implements OnInit {
 		this.viewModel = new PostViewModel();
 	}
 
-	public ngOnInit(): void {
-		this.route.params.subscribe(p => {
-			this.id = +p['id'] || 0;
-			this.pageTitle = this.id ? 'Edit Post' : 'Create Post';
+	public async ngOnInit() {
+		const params = this.route.snapshot.params;
+		this.id = +params['id'] || 0;
+		this.pageTitle = this.id ? 'Edit Post' : 'Create Post';
 
-			this.populateForm().then().catch(err => {
-				console.error(`Fail populating form: `, err.message ? err.message : err);
-				this.router.navigate(['/admin']).then();
-			});
-
-		});
+		try {
+			await this.populateFormAsync();
+		} catch (err) {
+			console.error(`Fail populating form: `, err.message ? err.message : err);
+			await this.router.navigate(['/admin']);
+		}
 	}
 
 	public onSubmit(): void {
@@ -45,16 +45,16 @@ export class PostFormComponent implements OnInit {
 			return;
 
 		if (this.id < 1)
-			this.createPost();
+			this.postService.createAsync(this.viewModel.Model);
 		else
-			this.updatePost();
+			this.postService.updateAsync(this.id, this.viewModel.Model);
 	}
 
 	public delete(): void {
 		if (this.id < 1)
 			return;
 
-		this.deletePost();
+		this.postService.deleteAsync(this.id);
 	}
 
 	public dateFormat(date: string): string {
@@ -72,28 +72,7 @@ export class PostFormComponent implements OnInit {
 		return category.id === this.viewModel.get(`category`).id;
 	}
 
-	private updatePost(): void {
-		this.postService
-			.update(this.id, this.viewModel.Model)
-			.subscribe(id => console.log(`save success`),
-				err => console.error(`Fail updating posts`, err));
-	}
-
-	private createPost(): void {
-		this.postService
-			.create(this.viewModel.Model)
-			.subscribe(id => this.router.navigate(['/admin']),
-				err => console.error(`Fail creating posts`, err));
-	}
-
-	private  deletePost(): void {
-		this.postService
-			.delete(this.id)
-			.subscribe(id => this.router.navigate(['/admin']),
-				err => console.error(`Fail updating posts`, err));
-	}
-
-	private async populateForm(): Promise<void> {
+	private async populateFormAsync(): Promise<void> {
 		this.categories = await this.categoryService.getCategoriesAsync();
 		if (this.id > 1)
 			this.viewModel.Model = await this.postService.getPostAsync(this.id);

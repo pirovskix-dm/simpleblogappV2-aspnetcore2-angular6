@@ -27,16 +27,12 @@ export class BlogComponent implements OnInit {
 	) {}
 
 	public ngOnInit() {
-		this.populatePosts();
+		this.populatePostsAsync();
 	}
 
-	private populatePosts(): void {
-		this.postService
-			.getBlogPosts(this.query)
-			.subscribe(qr => {
-				console.log(`Populationg from service`);
-				this.totalItems = qr.totalItems;
-				this.posts = qr.items;
-			}, err => console.error(`Fail populating posts`, err));
+	private async populatePostsAsync(): Promise<void> {
+		const result = await this.postService.getBlogPostsAsync(this.query);
+		this.totalItems = result.totalItems;
+		this.posts = result.items;
 	}
 }

@@ -17,8 +17,11 @@ export class PostService {
 
 	}
 
-	public getPosts(): Observable<PostModel[]> {
-		return this.http.get<PostModel[]>(this.postEndpoint);
+	public getPostsAsync(): Promise<PostModel[]> {
+		return this
+			.http
+			.get<PostModel[]>(this.postEndpoint)
+			.toPromise();
 	}
 
 	public getAdminPostsAsync(query: Query): Promise<QueryResultPost> {
@@ -28,32 +31,46 @@ export class PostService {
 			.toPromise();
 	}
 
-	public getBlogPosts(query: Query): Observable<QueryResultPost> {
-		return this.http.get<QueryResultPost>(`${this.postEndpoint}/blog`, {params: this.getParams(query)});
-	}
-
-	public getPost(id: number): Observable<PostModel> {
-		return this.http.get<PostModel>(`${this.postEndpoint}/${id}`);
-	}
-
-	public getDefaultPost(): Observable<PostModel> {
-		return this.http.get<PostModel>(`${this.postEndpoint}/default`);
-	}
-
-	public create(post: PostModel): Observable<number> {
-		return this.http.post<number>(this.postEndpoint, post);
-	}
-
-	public delete(id: number): Observable<number> {
-		return this.http.delete<number>(`${this.postEndpoint}/${id}`);
-	}
-
-	public update(id: number, post: PostModel): Observable<number> {
-		return this.http.put<number>(`${this.postEndpoint}/${id}`, post);
+	public getBlogPostsAsync(query: Query): Promise<QueryResultPost> {
+		return this
+			.http
+			.get<QueryResultPost>(`${this.postEndpoint}/blog`, {params: this.getParams(query)})
+			.toPromise();
 	}
 
 	public getPostAsync(id: number): Promise<PostModel> {
-		return this.getPost(id).toPromise();
+		return this
+			.http
+			.get<PostModel>(`${this.postEndpoint}/${id}`)
+			.toPromise();
+	}
+
+	public getDefaultPostAsync(): Promise<PostModel> {
+		return this
+			.http
+			.get<PostModel>(`${this.postEndpoint}/default`)
+			.toPromise();
+	}
+
+	public createAsync(post: PostModel): Promise<number> {
+		return this
+			.http
+			.post<number>(this.postEndpoint, post)
+			.toPromise();
+	}
+
+	public deleteAsync(id: number): Promise<number> {
+		return this
+			.http
+			.delete<number>(`${this.postEndpoint}/${id}`)
+			.toPromise();
+	}
+
+	public updateAsync(id: number, post: PostModel): Promise<number> {
+		return this
+			.http
+			.put<number>(`${this.postEndpoint}/${id}`, post)
+			.toPromise();
 	}
 
 	private getParams(query: Query): HttpParams {
