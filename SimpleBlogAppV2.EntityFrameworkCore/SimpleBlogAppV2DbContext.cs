@@ -1,11 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using SimpleBlogAppV2.Core.Entities;
 using SimpleBlogAppV2.Core.VirtualEntities;
 using System.Linq;
 
 namespace SimpleBlogAppV2.EntityFrameworkCore
 {
-	public class SimpleBlogAppV2DbContext : DbContext
+	public class SimpleBlogAppV2DbContext : IdentityDbContext<AppUser>
 	{
 		public DbSet<Post> Posts { get; set; }
 		public DbSet<Category> Categories { get; set; }
@@ -14,6 +16,12 @@ namespace SimpleBlogAppV2.EntityFrameworkCore
 			: base(options)
 		{
 			Database.Migrate();
+		}
+
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		{
+			optionsBuilder
+				.ConfigureWarnings(w => w.Throw(RelationalEventId.QueryClientEvaluationWarning));
 		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
