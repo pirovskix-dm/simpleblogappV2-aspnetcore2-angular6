@@ -14,6 +14,5 @@ namespace SimpleBlogAppV2.App
 		{
 			return WebHost.CreateDefaultBuilder(args).UseStartup<Startup>();
 		}
-			
 	}
 }

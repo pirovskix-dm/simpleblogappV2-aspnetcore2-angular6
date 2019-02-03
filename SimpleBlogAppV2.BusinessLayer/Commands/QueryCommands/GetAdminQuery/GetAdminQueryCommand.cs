@@ -5,6 +5,5 @@ namespace SimpleBlogAppV2.BusinessLayer.Commands.QueryCommands.GetAdminQuery
 {
 	public class GetAdminQueryCommand : QueryObjectDTO, IRequest<QueryResultDTO<PostDTO>>
 	{
-
 	}
 }

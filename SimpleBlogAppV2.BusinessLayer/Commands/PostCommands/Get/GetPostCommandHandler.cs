@@ -37,7 +37,9 @@ namespace SimpleBlogAppV2.BusinessLayer.Commands.PostCommands.Get
 			});
 
 			if (result == null)
+			{
 				throw new BlogNotFoundException("Post", request.Id);
+			}
 
 			return result;
 		}

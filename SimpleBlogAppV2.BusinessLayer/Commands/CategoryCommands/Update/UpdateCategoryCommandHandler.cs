@@ -22,7 +22,9 @@ namespace SimpleBlogAppV2.BusinessLayer.Commands.CategoryCommands.Update
 		{
 			var category = await categoryRepository.GetAsync(request.Id, cancellationToken, c => c);
 			if (category == null)
+			{
 				throw new BlogNotFoundException("Category", request.Id);
+			}
 
 			category.Name = request.Name;
 			category.DateLastUpdated = DateTime.UtcNow;

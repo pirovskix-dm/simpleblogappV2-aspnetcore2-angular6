@@ -6,6 +6,5 @@ namespace SimpleBlogAppV2.BusinessLayer.Commands.CategoryCommands.GetAll
 {
 	public class GetAllCategoryCommand : IRequest<IEnumerable<CategoryDTO>>
 	{
-		
 	}
 }

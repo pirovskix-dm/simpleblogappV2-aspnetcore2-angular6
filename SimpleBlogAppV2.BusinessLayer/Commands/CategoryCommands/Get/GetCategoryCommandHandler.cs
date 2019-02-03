@@ -28,7 +28,9 @@ namespace SimpleBlogAppV2.BusinessLayer.Commands.CategoryCommands.Get
 			});
 
 			if (result == null)
+			{
 				throw new BlogNotFoundException("Category", request.Id);
+			}
 
 			return result;
 		}

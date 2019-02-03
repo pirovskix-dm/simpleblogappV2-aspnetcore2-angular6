@@ -16,7 +16,6 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Repositories
 		public EfCategoryRepository(SimpleBlogAppV2DbContext context)
 			: base(context)
 		{
-
 		}
 
 		public async Task<IEnumerable<T>> GetAllAsync<T>(CancellationToken ct, Expression<Func<Category, T>> exp)

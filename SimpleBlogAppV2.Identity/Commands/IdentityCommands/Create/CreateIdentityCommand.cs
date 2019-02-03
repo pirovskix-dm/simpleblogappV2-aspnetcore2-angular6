@@ -7,7 +7,6 @@ namespace SimpleBlogAppV2.Identity.Commands.IdentityCommands.Create
 	{
 		public CreateIdentityCommand()
 		{
-
 		}
 	}
 }

@@ -5,6 +5,5 @@ namespace SimpleBlogAppV2.BusinessLayer.Commands.PostCommands.Create
 {
 	public class CreatePostCommand : PostDTO, IRequest<int>
 	{
-
 	}
 }

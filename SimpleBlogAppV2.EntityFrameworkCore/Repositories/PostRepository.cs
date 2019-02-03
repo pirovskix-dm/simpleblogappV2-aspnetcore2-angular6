@@ -18,7 +18,6 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Repositories
 		public EfPostRepository(SimpleBlogAppV2DbContext context)
 			: base(context)
 		{
-
 		}
 
 		public async Task<IEnumerable<T>> GetAllAsync<T>(CancellationToken ct, Expression<Func<Post, T>> exp)
@@ -63,15 +62,21 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Repositories
 				.AsQueryable();
 
 			if (!string.IsNullOrWhiteSpace(queryObj.Search))
+			{
 				query = query.ApplyStringSearching(queryObj.SearchBy, queryObj.Search);
+			}
 
 			if (queryObj.Filters != null)
+			{
 				query = query.ApplyFiltering(queryObj.Filters);
+			}
 
 			var countTask = query.CountAsync(ct);
 
 			if (!string.IsNullOrWhiteSpace(queryObj.SortBy))
+			{
 				query = query.ApplyOrdering(queryObj.SortBy, queryObj.IsSortAscending);
+			}
 
 			var itemsTask = query
 				.ApplyPaging(queryObj.Page, queryObj.PageSize)

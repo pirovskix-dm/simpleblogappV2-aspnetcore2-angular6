@@ -10,19 +10,25 @@ namespace SimpleBlogAppV2.BusinessLayer.Utils
 		public static Dictionary<string, int> ParseFilter(string filters)
 		{
 			if (string.IsNullOrWhiteSpace(filters))
+			{
 				return null;
+			}
 
 			var result = new Dictionary<string, int>();
 
 			string[] pairs = filters.Split(',', StringSplitOptions.RemoveEmptyEntries);
 			if (pairs.Length < 1)
+			{
 				return null;
+			}
 
 			foreach (var pair in pairs)
 			{
 				string[] valueKey = pair.Split(':', StringSplitOptions.RemoveEmptyEntries);
 				if (valueKey.Length != 2)
+				{
 					throw new ArgumentException("Invalid filter key `" + pair + "`");
+				}
 
 				TryAddToDictionary(result, valueKey[0].FirstLetterToUpperCase(), valueKey[1]);
 			}
@@ -34,7 +40,9 @@ namespace SimpleBlogAppV2.BusinessLayer.Utils
 		public static string[] ParseSearch(string search)
 		{
 			if (string.IsNullOrWhiteSpace(search))
+			{
 				return null;
+			}
 
 			return search.Split(',', StringSplitOptions.RemoveEmptyEntries);
 		}
@@ -43,11 +51,15 @@ namespace SimpleBlogAppV2.BusinessLayer.Utils
 		private static void TryAddToDictionary(Dictionary<string, int> d, string key, string value)
 		{
 			if (d.ContainsKey(key) || string.IsNullOrWhiteSpace(key))
+			{
 				throw new ArgumentException("Invalid filter key");
+			}
 
 			int.TryParse(value, out int intValue);
 			if (intValue < 1)
+			{
 				throw new ArgumentException("Invalid filter value");
+			}
 
 			d.Add(key, intValue);
 		}
@@ -56,7 +68,9 @@ namespace SimpleBlogAppV2.BusinessLayer.Utils
 		public static string FirstLetterToUpperCase(this string s)
 		{
 			if (string.IsNullOrWhiteSpace(s))
+			{
 				return s;
+			}
 
 			char[] a = s.ToCharArray();
 			a[0] = char.ToUpper(a[0]);

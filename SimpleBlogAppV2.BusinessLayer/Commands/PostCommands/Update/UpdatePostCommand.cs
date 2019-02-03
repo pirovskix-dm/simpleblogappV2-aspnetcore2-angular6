@@ -5,6 +5,5 @@ namespace SimpleBlogAppV2.BusinessLayer.Commands.PostCommands.Update
 {
 	public class UpdatePostCommand : PostDTO, IRequest<int>
 	{
-
 	}
 }

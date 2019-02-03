@@ -6,7 +6,6 @@ namespace SimpleBlogAppV2.BusinessLayer.Commands.CategoryCommands.GetAll
 	{
 		public GetAllCategoryCommandValidator()
 		{
-			
 		}
 	}
 }

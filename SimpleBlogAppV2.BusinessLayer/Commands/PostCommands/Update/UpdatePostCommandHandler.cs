@@ -22,7 +22,9 @@ namespace SimpleBlogAppV2.BusinessLayer.Commands.PostCommands.Update
 		{
 			var post = await postRepository.GetAsync(request.Id, cancellationToken, p => p);
 			if (post == null)
+			{
 				throw new BlogNotFoundException("Post", request.Id);
+			}
 
 			post.Title = request.Title;
 			post.ShortContent = request.ShortContent;

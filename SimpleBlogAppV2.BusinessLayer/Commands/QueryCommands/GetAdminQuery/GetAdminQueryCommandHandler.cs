@@ -33,7 +33,7 @@ namespace SimpleBlogAppV2.BusinessLayer.Commands.QueryCommands.GetAdminQuery
 				PageSize = request.PageSize
 			};
 
-			var result = await postRepository.GetQueryResultAsync(query, ct,(Post p) => new PostDTO
+			var result = await postRepository.GetQueryResultAsync(query, ct, (Post p) => new PostDTO
 			{
 				Id = p.Id,
 				Title = p.Title,

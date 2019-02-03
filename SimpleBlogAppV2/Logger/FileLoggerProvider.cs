@@ -18,7 +18,6 @@ namespace SimpleBlogAppV2.Logger
 
 		public void Dispose()
 		{
-
 		}
 	}
 }

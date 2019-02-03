@@ -9,6 +9,7 @@ namespace SimpleBlogAppV2.Core.Entities
 	public class Category : BaseLookup, IEntity
 	{
 		public IList<Post> Posts { get; set; }
+
 		public Category()
 		{
 			Posts = new List<Post>();

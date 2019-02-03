@@ -10,7 +10,6 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Repositories
 		public EfUnitOfWork(SimpleBlogAppV2DbContext context)
 			: base(context)
 		{
-
 		}
 
 		public async Task SaveAsync(CancellationToken cancellationToken = default)

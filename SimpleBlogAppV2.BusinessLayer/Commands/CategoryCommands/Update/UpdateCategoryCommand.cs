@@ -5,6 +5,5 @@ namespace SimpleBlogAppV2.BusinessLayer.Commands.CategoryCommands.Update
 {
 	public class UpdateCategoryCommand : CategoryDTO, IRequest<int>
 	{
-
 	}
 }
