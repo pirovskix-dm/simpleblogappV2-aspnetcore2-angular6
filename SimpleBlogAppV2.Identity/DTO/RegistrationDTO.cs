@@ -1,4 +1,4 @@
-﻿namespace SimpleBlogAppV2.BusinessLayer.DTO
+﻿namespace SimpleBlogAppV2.Identity.DTO
 {
 	public class RegistrationDTO
 	{

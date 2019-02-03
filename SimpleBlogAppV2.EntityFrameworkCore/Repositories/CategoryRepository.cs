@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,7 +23,8 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Repositories
 		{
 			return await context.Categories
 				.Select(exp)
-				.ToListAsync(ct);
+				.ToListAsync(ct)
+				.ConfigureAwait(false);
 		}
 
 		public async Task<T> GetAsync<T>(int id, CancellationToken ct, Expression<Func<Category, T>> exp)
@@ -32,7 +32,8 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Repositories
 			return await context.Categories
 				.Where(p => p.Id == id)
 				.Select(exp)
-				.FirstOrDefaultAsync(ct);
+				.FirstOrDefaultAsync(ct)
+				.ConfigureAwait(false);
 		}
 
 		public void Add(Category entity)

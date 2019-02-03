@@ -1,31 +1,38 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using SimpleBlogAppV2.BusinessLayer.Exceptions;
+using SimpleBlogAppV2.Validation.Exceptions;
 using System;
+using System.Collections.Generic;
 using System.Net;
 
-namespace SimpleBlogAppV2.Filters
+namespace SimpleBlogAppV2.Validation.Filters
 {
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 	public class CustomExceptionFilterAttribute : ExceptionFilterAttribute
 	{
+		public readonly Dictionary<Type, Action<ExceptionContext>> exceptionHandlers;
+
+		public CustomExceptionFilterAttribute()
+		{
+			exceptionHandlers = new Dictionary<Type, Action<ExceptionContext>>();
+			exceptionHandlers.Add(typeof(BlogValidationException), HandleBlogValidationException);
+			exceptionHandlers.Add(typeof(BlogNotFoundException), HandleBlogNotFoundException);
+			exceptionHandlers.Add(typeof(IdentityRegistrationException), HandleIdentityRegistrationException);
+		}
+
 		public override void OnException(ExceptionContext context)
 		{
 			context.HttpContext.Response.ContentType = "application/json";
 
-			if (context.Exception is BlogValidationException)
+			Type exType = context.Exception.GetType();
+			if (exceptionHandlers.ContainsKey(exType))
 			{
-				HandleBlogValidationException(context);
-				return;
+				exceptionHandlers[exType].Invoke(context);
 			}
-
-			if (context.Exception is BlogNotFoundException)
+			else
 			{
-				HandleBlogNotFoundException(context);
-				return;
+				HandleDefaultException(context);
 			}
-
-			HandleDefaultException(context);
 		}
 
 		private void HandleBlogValidationException(ExceptionContext context)
@@ -52,6 +59,12 @@ namespace SimpleBlogAppV2.Filters
 				error = new[] { context.Exception.Message },
 				stackTrace = context.Exception.StackTrace
 			});
+		}
+
+		private void HandleIdentityRegistrationException(ExceptionContext context)
+		{
+			context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+			context.Result = new JsonResult(((IdentityRegistrationException)context.Exception).Failures);
 		}
 	}
 }

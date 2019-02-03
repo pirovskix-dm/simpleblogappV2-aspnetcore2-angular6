@@ -15,7 +15,7 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Repositories
 {
 	public class EfPostRepository : BaseRepository, IPostRepository
 	{
-		public EfPostRepository(SimpleBlogAppV2DbContext context) 
+		public EfPostRepository(SimpleBlogAppV2DbContext context)
 			: base(context)
 		{
 
@@ -26,7 +26,8 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Repositories
 			return await context.Posts
 				.Include(p => p.Category)
 				.Select(exp)
-				.ToListAsync(ct);
+				.ToListAsync(ct)
+				.ConfigureAwait(false);
 		}
 
 		public async Task<T> GetAsync<T>(int id, CancellationToken ct, Expression<Func<Post, T>> exp)
@@ -35,7 +36,8 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Repositories
 				.Include(p => p.Category)
 				.Where(p => p.Id == id)
 				.Select(exp)
-				.FirstOrDefaultAsync(ct);
+				.FirstOrDefaultAsync(ct)
+				.ConfigureAwait(false);
 		}
 
 		public void Add(Post entity)
@@ -76,7 +78,7 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Repositories
 				.Select(exp)
 				.ToListAsync(ct);
 
-			await Task.WhenAll(countTask, itemsTask);
+			await Task.WhenAll(countTask, itemsTask).ConfigureAwait(false);
 
 			var result = new QueryResult<T>();
 			result.TotalItems = countTask.Result;

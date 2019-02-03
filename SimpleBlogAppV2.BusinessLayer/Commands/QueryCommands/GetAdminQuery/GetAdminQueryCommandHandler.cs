@@ -1,13 +1,9 @@
 ﻿using MediatR;
 using SimpleBlogAppV2.BusinessLayer.DTO;
-using SimpleBlogAppV2.BusinessLayer.Exceptions;
 using SimpleBlogAppV2.BusinessLayer.Utils;
 using SimpleBlogAppV2.Core.Entities;
 using SimpleBlogAppV2.Core.Interfaces.Repositories;
 using SimpleBlogAppV2.Core.Query;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 

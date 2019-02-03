@@ -15,7 +15,9 @@ namespace SimpleBlogAppV2.EntityFrameworkCore.Repositories
 
 		public async Task SaveAsync(CancellationToken cancellationToken = default)
 		{
-			await context.SaveChangesAsync(cancellationToken);
+			await context
+				.SaveChangesAsync(cancellationToken)
+				.ConfigureAwait(false);
 		}
 	}
 }

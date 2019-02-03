@@ -34,6 +34,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SimpleBlogAppV2.BusinessLayer\SimpleBlogAppV2.BusinessLayer.csproj" />
+    <ProjectReference Include="..\SimpleBlogAppV2.Identity\SimpleBlogAppV2.Identity.csproj" />
   </ItemGroup>
 
 </Project>

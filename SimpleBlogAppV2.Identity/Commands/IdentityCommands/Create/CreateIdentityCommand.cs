@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using SimpleBlogAppV2.BusinessLayer.DTO;
+using SimpleBlogAppV2.Identity.DTO;
 
-namespace SimpleBlogAppV2.BusinessLayer.Commands.IdentityCommands.Create
+namespace SimpleBlogAppV2.Identity.Commands.IdentityCommands.Create
 {
 	public class CreateIdentityCommand : RegistrationDTO, IRequest<string>
 	{

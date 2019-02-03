@@ -21,9 +21,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation.AspNetCore" Version="8.0.100" />
-    <PackageReference Include="MediatR" Version="5.1.0" />
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="5.1.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="8.1.3" />
+    <PackageReference Include="MediatR" Version="6.0.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="6.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="2.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.3" />
@@ -39,6 +39,8 @@
     <ProjectReference Include="..\SimpleBlogAppV2.BusinessLayer\SimpleBlogAppV2.BusinessLayer.csproj" />
     <ProjectReference Include="..\SimpleBlogAppV2.Core\SimpleBlogAppV2.Core.csproj" />
     <ProjectReference Include="..\SimpleBlogAppV2.EntityFrameworkCore\SimpleBlogAppV2.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\SimpleBlogAppV2.Identity\SimpleBlogAppV2.Identity.csproj" />
+    <ProjectReference Include="..\SimpleBlogAppV2.Validation\SimpleBlogAppV2.Validation.csproj" />
     <ProjectReference Include="..\SimpleBlogAppV2.Web\SimpleBlogAppV2.Web.csproj" />
   </ItemGroup>
 

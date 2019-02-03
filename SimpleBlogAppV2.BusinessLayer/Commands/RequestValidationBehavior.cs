@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using MediatR;
-using SimpleBlogAppV2.BusinessLayer.Exceptions;
+using SimpleBlogAppV2.Validation.Exceptions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;

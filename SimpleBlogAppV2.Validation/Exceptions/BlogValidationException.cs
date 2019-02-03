@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SimpleBlogAppV2.BusinessLayer.Exceptions
+namespace SimpleBlogAppV2.Validation.Exceptions
 {
 	public class BlogValidationException : Exception
 	{

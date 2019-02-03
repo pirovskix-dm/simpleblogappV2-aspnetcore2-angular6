@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SimpleBlogAppV2.BusinessLayer.Commands.IdentityCommands.Create;
+using SimpleBlogAppV2.Identity.Commands.IdentityCommands.Create;
 using System.Net;
 using System.Threading.Tasks;
 
