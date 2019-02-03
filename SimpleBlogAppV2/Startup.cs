@@ -32,9 +32,8 @@ namespace SimpleBlogAppV2.App
 
 		public void ConfigureServices(IServiceCollection services)
 		{
-			string connectionString = @"Data Source=DESKTOP-F2T9MQ1;Initial Catalog=SimpleBlogApp;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-			var identityBuilder = services.ConfigureIdentity();
-			services.UseEntityFramework(connectionString, identityBuilder);
+			var identityBuilder = services.ConfigureIdentity(Configuration);
+			services.UseEntityFramework(Configuration.GetConnectionString("Default"), identityBuilder);
 
 			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
 			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));

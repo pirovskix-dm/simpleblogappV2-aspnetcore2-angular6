@@ -18,6 +18,7 @@ namespace SimpleBlogAppV2.Validation.Filters
 			exceptionHandlers.Add(typeof(BlogValidationException), HandleBlogValidationException);
 			exceptionHandlers.Add(typeof(BlogNotFoundException), HandleBlogNotFoundException);
 			exceptionHandlers.Add(typeof(IdentityRegistrationException), HandleIdentityRegistrationException);
+			exceptionHandlers.Add(typeof(LoginFailureException), HandleLoginFailureException);
 		}
 
 		public override void OnException(ExceptionContext context)
@@ -65,6 +66,16 @@ namespace SimpleBlogAppV2.Validation.Filters
 		{
 			context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
 			context.Result = new JsonResult(((IdentityRegistrationException)context.Exception).Failures);
+		}
+
+		private void HandleLoginFailureException(ExceptionContext context)
+		{
+			context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+			context.Result = new JsonResult(new
+			{
+				error = new[] { context.Exception.Message },
+				stackTrace = context.Exception.StackTrace
+			});
 		}
 	}
 }

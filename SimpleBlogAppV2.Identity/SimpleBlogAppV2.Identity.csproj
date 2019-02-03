@@ -7,16 +7,13 @@
   <ItemGroup>
     <PackageReference Include="MediatR" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.1" />
+    <PackageReference Include="PostSharp.Patterns.Common" Version="6.0.34" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SimpleBlogAppV2.Core\SimpleBlogAppV2.Core.csproj" />
     <ProjectReference Include="..\SimpleBlogAppV2.EntityFrameworkCore\SimpleBlogAppV2.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\SimpleBlogAppV2.Validation\SimpleBlogAppV2.Validation.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Commands\" />
   </ItemGroup>
 
 </Project>
