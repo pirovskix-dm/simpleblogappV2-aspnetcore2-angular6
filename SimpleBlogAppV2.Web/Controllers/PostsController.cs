@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SimpleBlogAppV2.BusinessLayer.Commands.PostCommands.Create;
 using SimpleBlogAppV2.BusinessLayer.Commands.PostCommands.Delete;
@@ -30,6 +31,7 @@ namespace SimpleBlogAppV2.Web.Controllers
 			return Ok(await mediator.Send(command));
 		}
 
+		[Authorize(Policy = "ApiUser")]
 		[HttpGet("admin")]
 		[ProducesResponseType(typeof(QueryResultDTO<PostDTO>), (int)HttpStatusCode.OK)]
 		public async Task<IActionResult> GetAdminPosts(GetAdminQueryCommand command)

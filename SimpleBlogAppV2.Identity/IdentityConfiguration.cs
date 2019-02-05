@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using SimpleBlogAppV2.Core.Entities;
+using SimpleBlogAppV2.Identity.Constants;
 using SimpleBlogAppV2.Identity.Factory;
 using SimpleBlogAppV2.Identity.Models;
 using System;
@@ -45,6 +46,8 @@ namespace SimpleBlogAppV2.Identity
 				options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
 					.RequireAuthenticatedUser()
 					.Build();
+
+				options.AddPolicy("ApiUser", policy => policy.RequireClaim(JwtClaimIdentifiers.Rol, JwtClaimIdentifiers.ApiAccess));
 			});
 
 			var tokenValidationParameters = new TokenValidationParameters

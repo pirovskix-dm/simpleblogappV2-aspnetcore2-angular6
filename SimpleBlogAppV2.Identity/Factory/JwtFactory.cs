@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using SimpleBlogAppV2.Identity.Constants;
 using SimpleBlogAppV2.Identity.Models;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -11,9 +12,6 @@ namespace SimpleBlogAppV2.Identity.Factory
 	public class JwtFactory : IJwtFactory
 	{
 		private readonly JwtIssuerOptions jwtOptions;
-		private const string Rol = "rol";
-		private const string Id = "id";
-		private const string ApiAccess = "api_access";
 
 		public JwtFactory(IOptions<JwtIssuerOptions> jwtOptions)
 		{
@@ -28,8 +26,8 @@ namespace SimpleBlogAppV2.Identity.Factory
 				 new Claim(JwtRegisteredClaimNames.Sub, userName),
 				 new Claim(JwtRegisteredClaimNames.Jti, await jwtOptions.JtiGenerator()),
 				 new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(jwtOptions.IssuedAt).ToString(), ClaimValueTypes.Integer64),
-				 identity.FindFirst(Rol),
-				 identity.FindFirst(Id)
+				 identity.FindFirst(JwtClaimIdentifiers.Rol),
+				 identity.FindFirst(JwtClaimIdentifiers.Id)
 			};
 
 			// Create the JWT security token and encode it.
@@ -48,8 +46,8 @@ namespace SimpleBlogAppV2.Identity.Factory
 		{
 			return new ClaimsIdentity(new GenericIdentity(userName, "Token"), new[]
 			{
-				new Claim(Id, id),
-				new Claim(Rol, ApiAccess)
+				new Claim(JwtClaimIdentifiers.Id, id),
+				new Claim(JwtClaimIdentifiers.Rol, JwtClaimIdentifiers.ApiAccess)
 			});
 		}
 
