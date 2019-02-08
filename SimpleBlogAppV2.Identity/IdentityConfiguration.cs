@@ -21,6 +21,7 @@ namespace SimpleBlogAppV2.Identity
 
 		public static IdentityBuilder ConfigureIdentity(this IServiceCollection services, IConfiguration configuration)
 		{
+			services.AddCors();
 			services.AddSingleton<IJwtFactory, JwtFactory>();
 
 			IdentityBuilder identityBuilder = services.AddDefaultIdentity<AppUser>();
@@ -51,29 +52,32 @@ namespace SimpleBlogAppV2.Identity
 				options.AddPolicy("ApiUser", policy => policy.RequireClaim(JwtClaimIdentifiers.Rol, JwtClaimIdentifiers.ApiAccess));
 			});
 
-			var tokenValidationParameters = new TokenValidationParameters
-			{
-				ValidateIssuer = true,
-				ValidIssuer = jwtAppSettingOptions["Issuer"],
-
-				ValidateAudience = true,
-				ValidAudience = jwtAppSettingOptions["Audience"],
-
-				ValidateIssuerSigningKey = true,
-				IssuerSigningKey = signingKey,
-
-				RequireExpirationTime = false,
-				ValidateLifetime = false,
-				ClockSkew = TimeSpan.Zero,
-			};
-
 			services.
 				AddAuthentication(o =>
 				{
 					o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
 					o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 				})
-				.AddJwtBearer(o => o.TokenValidationParameters = tokenValidationParameters);
+				.AddJwtBearer(o =>
+				{
+					o.RequireHttpsMetadata = false;
+					o.SaveToken = true;
+					o.TokenValidationParameters = new TokenValidationParameters
+					{
+						ValidateIssuer = true,
+						ValidIssuer = jwtAppSettingOptions["Issuer"],
+
+						ValidateAudience = true,
+						ValidAudience = jwtAppSettingOptions["Audience"],
+
+						ValidateIssuerSigningKey = true,
+						IssuerSigningKey = signingKey,
+
+						RequireExpirationTime = false,
+						ValidateLifetime = false,
+						ClockSkew = TimeSpan.Zero,
+					};
+				});
 		}
 
 		private static void ConfigureCookie(this IServiceCollection services)
@@ -112,7 +116,13 @@ namespace SimpleBlogAppV2.Identity
 		public static void UseAppIdentity(this IApplicationBuilder app)
 		{
 			app.UseMiddleware<JWTInHeaderMiddleware>();
-			app.UseCookiePolicy();
+			app.UseCors(o =>
+			{
+				o.AllowAnyOrigin();
+				o.AllowAnyMethod();
+				o.AllowAnyHeader();
+			});
+			//app.UseCookiePolicy();
 			app.UseAuthentication();
 		}
 	}
