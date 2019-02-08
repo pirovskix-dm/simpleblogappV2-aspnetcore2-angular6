@@ -7,6 +7,7 @@ import {TableColumn} from '../../interfaces/table-column';
 import {CategoryService} from '../../services/category.service';
 import {CategoryModel} from '../../models/category-view-model';
 import {DatePipe} from '@angular/common';
+import {Router} from '@angular/router';
 
 @Component({
 	selector: 'app-admin',
@@ -39,7 +40,8 @@ export class AdminComponent implements OnInit {
 	];
 	constructor(
 		private postService: PostService,
-		private categoryService: CategoryService
+		private categoryService: CategoryService,
+		private router: Router
 	) {
 	}
 
@@ -110,10 +112,15 @@ export class AdminComponent implements OnInit {
 	private async populatePostsAsync(): Promise<void> {
 		this.query.filters = this.createFilter();
 
-		const result = await this.postService.getAdminPostsAsync(this.query);
-		this.totalItems = result.totalItems;
-		this.posts = result.items;
-		this.infoMessage = `nothing found`;
+		try {
+			const result = await this.postService.getAdminPostsAsync(this.query);
+			this.totalItems = result.totalItems;
+			this.posts = result.items;
+			this.infoMessage = `nothing found`;
+		} catch (e) {
+			console.error(e);
+			this.router.navigate([`/login`]);
+		}
 	}
 
 	private async populateCategoriesAsync(): Promise<void> {

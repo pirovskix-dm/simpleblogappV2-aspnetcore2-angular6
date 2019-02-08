@@ -12,6 +12,7 @@ using SimpleBlogAppV2.BusinessLayer.Commands;
 using SimpleBlogAppV2.BusinessLayer.Commands.PostCommands.Create;
 using SimpleBlogAppV2.EntityFrameworkCore;
 using SimpleBlogAppV2.Identity;
+using SimpleBlogAppV2.Identity.Commands.IdentityCommands.Login;
 using SimpleBlogAppV2.Logger;
 using SimpleBlogAppV2.Validation.Filters;
 using System;
@@ -42,7 +43,9 @@ namespace SimpleBlogAppV2.App
 			services
 				.AddMvc(o => o.Filters.Add(typeof(CustomExceptionFilterAttribute)))
 				.SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
-				.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreatePostCommandValidator>());
+				.AddFluentValidation(fv => fv
+					.RegisterValidatorsFromAssemblyContaining<CreatePostCommandValidator>()
+					.RegisterValidatorsFromAssemblyContaining<LoginCommandValidator>());
 
 			services.Configure<ApiBehaviorOptions>(options =>
 			{

@@ -7,13 +7,14 @@ import {QueryResultPost} from '../models/query-result-post';
 import {CategoryModel} from '../models/category-view-model';
 import '../utils/extensions';
 import * as _ from 'underscore';
+import {AccountService} from './account.service';
 
 @Injectable({providedIn: 'root'})
 export class PostService {
 
 	private readonly postEndpoint = '/api/posts';
 
-	constructor(private http: HttpClient) {
+	constructor(private http: HttpClient, private accountService: AccountService) {
 
 	}
 

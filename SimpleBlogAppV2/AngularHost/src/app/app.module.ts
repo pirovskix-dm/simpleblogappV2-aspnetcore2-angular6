@@ -15,9 +15,14 @@ import {PaginationComponent} from './components/pagination/pagination.component'
 import {BlogInputComponent} from './components/extensions/blog-input/blog-input.component';
 import {BlogTextareaComponent} from './components/extensions/blog-textarea/blog-textarea.component';
 import {BlogTextComponent} from './components/extensions/blog-text/blog-text.component';
+import {RegistrationFormComponent} from './components/registration-form/registration-form.component';
+import {LoginFormComponent} from './components/login-form/login-form.component';
 
 import {PostService} from './services/post.service';
 import {CategoryService} from './services/category.service';
+import {CookieService} from 'ngx-cookie-service';
+
+import {AuthGuard} from './guards/auth.guard';
 
 @NgModule({
 	declarations: [
@@ -31,7 +36,9 @@ import {CategoryService} from './services/category.service';
 		PaginationComponent,
 		BlogInputComponent,
 		BlogTextareaComponent,
-		BlogTextComponent
+		BlogTextComponent,
+		RegistrationFormComponent,
+		LoginFormComponent
 	],
 	imports: [
 		BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
@@ -41,15 +48,16 @@ import {CategoryService} from './services/category.service';
 		RouterModule.forRoot([
 			{path: '', component: BlogComponent, pathMatch: 'full'},
 			{path: 'home', redirectTo: ''},
-			{path: 'admin', component: AdminComponent},
+			{path: 'admin', component: AdminComponent, canActivate: [AuthGuard]},
+			{path: 'login', component: LoginFormComponent},
 			{path: 'error', redirectTo: ''},
-			{path: 'post/create', component: PostFormComponent},
-			{path: 'post/edit/:id', component: PostFormComponent},
+			{path: 'post/create', component: PostFormComponent, canActivate: [AuthGuard]},
+			{path: 'post/edit/:id', component: PostFormComponent, canActivate: [AuthGuard]},
 			{path: 'post/:id', component: PostViewComponent},
 			{path: '**', redirectTo: ''}
 		])
 	],
-	providers: [PostService, CategoryService],
+	providers: [PostService, CategoryService, CookieService],
 	bootstrap: [AppComponent]
 })
 export class AppModule {

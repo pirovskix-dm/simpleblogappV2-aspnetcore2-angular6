@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SimpleBlogAppV2.Identity.Commands.IdentityCommands.Create;
+using SimpleBlogAppV2.Identity.Commands.IdentityCommands.Login;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -17,9 +18,16 @@ namespace SimpleBlogAppV2.Web.Controllers
 			this.mediator = mediator;
 		}
 
-		[HttpPost]
+		[HttpPost("register")]
 		[ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
-		public async Task<IActionResult> CreateUser([FromBody] CreateIdentityCommand command)
+		public async Task<IActionResult> Register([FromBody] CreateIdentityCommand command)
+		{
+			return Ok(await mediator.Send(command));
+		}
+
+		[HttpPost("login")]
+		[ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
+		public async Task<IActionResult> Post([FromBody] LoginCommand command)
 		{
 			return Ok(await mediator.Send(command));
 		}

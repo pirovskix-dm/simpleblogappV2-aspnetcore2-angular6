@@ -39,7 +39,12 @@ namespace SimpleBlogAppV2.Validation.Filters
 		private void HandleBlogValidationException(ExceptionContext context)
 		{
 			context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-			context.Result = new JsonResult(((BlogValidationException)context.Exception).Failures);
+			context.Result = new JsonResult(new
+			{
+				message = new[] { context.Exception.Message },
+				failures = ((BlogValidationException)context.Exception).Failures,
+				stackTrace = context.Exception.StackTrace
+			});
 		}
 
 		private void HandleBlogNotFoundException(ExceptionContext context)
@@ -47,7 +52,7 @@ namespace SimpleBlogAppV2.Validation.Filters
 			context.HttpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
 			context.Result = new JsonResult(new
 			{
-				error = new[] { context.Exception.Message },
+				message = new[] { context.Exception.Message },
 				stackTrace = context.Exception.StackTrace
 			});
 		}
@@ -57,7 +62,7 @@ namespace SimpleBlogAppV2.Validation.Filters
 			context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 			context.Result = new JsonResult(new
 			{
-				error = new[] { context.Exception.Message },
+				message = new[] { context.Exception.Message },
 				stackTrace = context.Exception.StackTrace
 			});
 		}
@@ -65,7 +70,12 @@ namespace SimpleBlogAppV2.Validation.Filters
 		private void HandleIdentityRegistrationException(ExceptionContext context)
 		{
 			context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-			context.Result = new JsonResult(((IdentityRegistrationException)context.Exception).Failures);
+			context.Result = new JsonResult(new
+			{
+				message = new[] { context.Exception.Message },
+				failures = ((IdentityRegistrationException)context.Exception).Failures,
+				stackTrace = context.Exception.StackTrace
+			});
 		}
 
 		private void HandleLoginFailureException(ExceptionContext context)
@@ -73,7 +83,7 @@ namespace SimpleBlogAppV2.Validation.Filters
 			context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
 			context.Result = new JsonResult(new
 			{
-				error = new[] { context.Exception.Message },
+				message = new[] { context.Exception.Message },
 				stackTrace = context.Exception.StackTrace
 			});
 		}

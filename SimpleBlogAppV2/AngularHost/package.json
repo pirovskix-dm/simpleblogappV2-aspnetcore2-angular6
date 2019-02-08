@@ -33,7 +33,8 @@
     "ngx-chips": "2.0.0-beta.0",
     "rxjs": "6.3.3",
     "underscore": "1.9.1",
-    "zone.js": "0.8.29"
+    "zone.js": "0.8.29",
+    "ngx-cookie-service": "2.1.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.13.0-rc.0",

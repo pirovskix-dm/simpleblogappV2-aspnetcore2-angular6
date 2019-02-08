@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using SimpleBlogAppV2.Core.Entities;
 using SimpleBlogAppV2.Identity.Constants;
 using SimpleBlogAppV2.Identity.Factory;
+using SimpleBlogAppV2.Identity.Middleware;
 using SimpleBlogAppV2.Identity.Models;
 using System;
 using System.Text;
@@ -25,7 +26,7 @@ namespace SimpleBlogAppV2.Identity
 			IdentityBuilder identityBuilder = services.AddDefaultIdentity<AppUser>();
 
 			services.ConfigureIdentityOptions();
-			services.ConfigureCookie();
+			//services.ConfigureCookie();
 			services.ConfigureJWT(configuration);
 
 			return identityBuilder;
@@ -81,9 +82,6 @@ namespace SimpleBlogAppV2.Identity
 			{
 				options.Cookie.HttpOnly = true;
 				options.ExpireTimeSpan = TimeSpan.FromDays(20);
-
-				//options.LoginPath = "/Identity/Account/Login";
-				//options.AccessDeniedPath = "/Identity/Account/AccessDenied";
 				options.SlidingExpiration = true;
 			});
 		}
@@ -113,6 +111,7 @@ namespace SimpleBlogAppV2.Identity
 
 		public static void UseAppIdentity(this IApplicationBuilder app)
 		{
+			app.UseMiddleware<JWTInHeaderMiddleware>();
 			app.UseCookiePolicy();
 			app.UseAuthentication();
 		}
