@@ -63,7 +63,7 @@ namespace SimpleBlogAppV2.App
 			if (env.IsDevelopment())
 			{
 				loggerFactory.SetPath(Directory.GetCurrentDirectory());
-				loggerFactory.CreateLogger<FileLogger>();
+				//loggerFactory.CreateLogger<FileLogger>();
 				app.UseDeveloperExceptionPage();
 			}
 			else

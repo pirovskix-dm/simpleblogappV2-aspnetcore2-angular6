@@ -13,7 +13,7 @@ namespace SimpleBlogAppV2.Logger
 
 		public ILogger CreateLogger(string categoryName)
 		{
-			return new FileLogger(path);
+			return FileLogger.Create(path);
 		}
 
 		public void Dispose()
