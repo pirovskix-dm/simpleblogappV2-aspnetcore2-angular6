@@ -1,0 +1,278 @@
+Starting @angular/cli on port 49937...
+
+Request starting HTTP/1.1 DEBUG http://localhost:55999/  0
+
+Successfully validated the token.
+
+> SimpleBlogAppV2@0.0.0 start C:\My\simpleblogappV2-aspnetcore2-angular6\SimpleBlogAppV2\AngularHost
+> ng serve "--port" "49937"
+
+** Angular Live Development Server is listening on localhost:49937, open your browser on http://localhost:49937/ **
+
+
+i ∩╜ówdm∩╜ú: wait until bundle finished: /
+
+
+Date: 2019-02-10T12:13:04.035Z
+Hash: 31eefffec1c8fdc19027
+Time: 7448ms
+chunk {main} main.js, main.js.map (main) 118 kB [initial] [rendered]
+chunk {polyfills} polyfills.js, polyfills.js.map (polyfills) 261 kB [initial] [rendered]
+chunk {runtime} runtime.js, runtime.js.map (runtime) 6.08 kB [entry] [rendered]
+chunk {styles} styles.js, styles.js.map (styles) 1.5 MB [initial] [rendered]
+chunk {vendor} vendor.js, vendor.js.map (vendor) 4.2 MB [initial] [rendered]
+
+
+i ∩╜ówdm∩╜ú: Compiled successfully.
+
+
+Sending file. Request path: '/runtime.js'. Physical path: 'C:\My\simpleblogappV2-aspnetcore2-angular6\SimpleBlogAppV2\AngularHost\dist\runtime.js'
+
+Sending file. Request path: '/main.js'. Physical path: 'C:\My\simpleblogappV2-aspnetcore2-angular6\SimpleBlogAppV2\AngularHost\dist\main.js'
+
+Sending file. Request path: '/polyfills.js'. Physical path: 'C:\My\simpleblogappV2-aspnetcore2-angular6\SimpleBlogAppV2\AngularHost\dist\polyfills.js'
+
+Sending file. Request path: '/styles.js'. Physical path: 'C:\My\simpleblogappV2-aspnetcore2-angular6\SimpleBlogAppV2\AngularHost\dist\styles.js'
+
+Sending file. Request path: '/vendor.js'. Physical path: 'C:\My\simpleblogappV2-aspnetcore2-angular6\SimpleBlogAppV2\AngularHost\dist\vendor.js'
+
+Sending file. Request path: '/runtime.js.map'. Physical path: 'C:\My\simpleblogappV2-aspnetcore2-angular6\SimpleBlogAppV2\AngularHost\dist\runtime.js.map'
+
+Sending file. Request path: '/polyfills.js.map'. Physical path: 'C:\My\simpleblogappV2-aspnetcore2-angular6\SimpleBlogAppV2\AngularHost\dist\polyfills.js.map'
+
+Sending file. Request path: '/styles.js.map'. Physical path: 'C:\My\simpleblogappV2-aspnetcore2-angular6\SimpleBlogAppV2\AngularHost\dist\styles.js.map'
+
+Sending file. Request path: '/vendor.js.map'. Physical path: 'C:\My\simpleblogappV2-aspnetcore2-angular6\SimpleBlogAppV2\AngularHost\dist\vendor.js.map'
+
+Sending file. Request path: '/main.js.map'. Physical path: 'C:\My\simpleblogappV2-aspnetcore2-angular6\SimpleBlogAppV2\AngularHost\dist\main.js.map'
+
+Successfully validated the token.
+
+Route matched with {action = "GetBlogPosts", controller = "Posts", page = "", area = ""}. Executing action SimpleBlogAppV2.Web.Controllers.PostsController.GetBlogPosts (SimpleBlogAppV2.Web)
+
+Executing action method SimpleBlogAppV2.Web.Controllers.PostsController.GetBlogPosts (SimpleBlogAppV2.Web) with arguments (SimpleBlogAppV2.BusinessLayer.Commands.QueryCommands.GetBlogQuery.GetBlogQueryCommand) - Validation state: Valid
+
+Entity Framework Core 2.1.4-rtm-31024 initialized 'SimpleBlogAppV2DbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: MigrationsAssembly=SimpleBlogAppV2.EntityFrameworkCore 
+
+No migrations were applied. The database is already up to date.
+
+The Include operation for navigation '[p].Category' is unnecessary and was ignored because the navigation is not reachable in the final query results. See https://go.microsoft.com/fwlink/?linkid=850303 for more information.
+
+The Include operation for navigation '[p].Category' is unnecessary and was ignored because the navigation is not reachable in the final query results. See https://go.microsoft.com/fwlink/?linkid=850303 for more information.
+
+Executed action method SimpleBlogAppV2.Web.Controllers.PostsController.GetBlogPosts (SimpleBlogAppV2.Web), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 519.6789ms.
+
+Executing ObjectResult, writing value of type 'SimpleBlogAppV2.BusinessLayer.DTO.QueryResultDTO`1[[SimpleBlogAppV2.BusinessLayer.DTO.PostDTO, SimpleBlogAppV2.BusinessLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+
+Executed action SimpleBlogAppV2.Web.Controllers.PostsController.GetBlogPosts (SimpleBlogAppV2.Web) in 621.8288ms
+
+Successfully validated the token.
+
+Successfully validated the token.
+
+Route matched with {action = "GetCategories", controller = "Categories", page = "", area = ""}. Executing action SimpleBlogAppV2.Web.Controllers.CategoriesController.GetCategories (SimpleBlogAppV2.Web)
+
+Route matched with {action = "GetAdminPosts", controller = "Posts", page = "", area = ""}. Executing action SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web)
+
+Executing action method SimpleBlogAppV2.Web.Controllers.CategoriesController.GetCategories (SimpleBlogAppV2.Web) with arguments (SimpleBlogAppV2.BusinessLayer.Commands.CategoryCommands.GetAll.GetAllCategoryCommand) - Validation state: Valid
+
+Entity Framework Core 2.1.4-rtm-31024 initialized 'SimpleBlogAppV2DbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: MigrationsAssembly=SimpleBlogAppV2.EntityFrameworkCore 
+
+Executing action method SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web) with arguments (SimpleBlogAppV2.BusinessLayer.Commands.QueryCommands.GetAdminQuery.GetAdminQueryCommand) - Validation state: Valid
+
+Entity Framework Core 2.1.4-rtm-31024 initialized 'SimpleBlogAppV2DbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: MigrationsAssembly=SimpleBlogAppV2.EntityFrameworkCore 
+
+No migrations were applied. The database is already up to date.
+
+No migrations were applied. The database is already up to date.
+
+The Include operation for navigation '[p].Category' is unnecessary and was ignored because the navigation is not reachable in the final query results. See https://go.microsoft.com/fwlink/?linkid=850303 for more information.
+
+Executed action method SimpleBlogAppV2.Web.Controllers.CategoriesController.GetCategories (SimpleBlogAppV2.Web), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 87.6967ms.
+
+Executed action method SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 70.6065ms.
+
+Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[SimpleBlogAppV2.BusinessLayer.DTO.CategoryDTO, SimpleBlogAppV2.BusinessLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+
+Executing ObjectResult, writing value of type 'SimpleBlogAppV2.BusinessLayer.DTO.QueryResultDTO`1[[SimpleBlogAppV2.BusinessLayer.DTO.PostDTO, SimpleBlogAppV2.BusinessLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+
+Executed action SimpleBlogAppV2.Web.Controllers.CategoriesController.GetCategories (SimpleBlogAppV2.Web) in 101.245ms
+
+Executed action SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web) in 101.6044ms
+
+Successfully validated the token.
+
+Route matched with {action = "GetAdminPosts", controller = "Posts", page = "", area = ""}. Executing action SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web)
+
+Executing action method SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web) with arguments (SimpleBlogAppV2.BusinessLayer.Commands.QueryCommands.GetAdminQuery.GetAdminQueryCommand) - Validation state: Valid
+
+Entity Framework Core 2.1.4-rtm-31024 initialized 'SimpleBlogAppV2DbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: MigrationsAssembly=SimpleBlogAppV2.EntityFrameworkCore 
+
+No migrations were applied. The database is already up to date.
+
+The Include operation for navigation '[p].Category' is unnecessary and was ignored because the navigation is not reachable in the final query results. See https://go.microsoft.com/fwlink/?linkid=850303 for more information.
+
+The Include operation for navigation '[p].Category' is unnecessary and was ignored because the navigation is not reachable in the final query results. See https://go.microsoft.com/fwlink/?linkid=850303 for more information.
+
+Executed action method SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 54.6493ms.
+
+Executing ObjectResult, writing value of type 'SimpleBlogAppV2.BusinessLayer.DTO.QueryResultDTO`1[[SimpleBlogAppV2.BusinessLayer.DTO.PostDTO, SimpleBlogAppV2.BusinessLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+
+Executed action SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web) in 63.8617ms
+
+Successfully validated the token.
+
+Route matched with {action = "GetAdminPosts", controller = "Posts", page = "", area = ""}. Executing action SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web)
+
+Executing action method SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web) with arguments (SimpleBlogAppV2.BusinessLayer.Commands.QueryCommands.GetAdminQuery.GetAdminQueryCommand) - Validation state: Valid
+
+Entity Framework Core 2.1.4-rtm-31024 initialized 'SimpleBlogAppV2DbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: MigrationsAssembly=SimpleBlogAppV2.EntityFrameworkCore 
+
+No migrations were applied. The database is already up to date.
+
+The Include operation for navigation '[p].Category' is unnecessary and was ignored because the navigation is not reachable in the final query results. See https://go.microsoft.com/fwlink/?linkid=850303 for more information.
+
+The Include operation for navigation '[p].Category' is unnecessary and was ignored because the navigation is not reachable in the final query results. See https://go.microsoft.com/fwlink/?linkid=850303 for more information.
+
+Executed action method SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 43.5763ms.
+
+Executing ObjectResult, writing value of type 'SimpleBlogAppV2.BusinessLayer.DTO.QueryResultDTO`1[[SimpleBlogAppV2.BusinessLayer.DTO.PostDTO, SimpleBlogAppV2.BusinessLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+
+Executed action SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web) in 53.842ms
+
+Successfully validated the token.
+
+Route matched with {action = "GetAdminPosts", controller = "Posts", page = "", area = ""}. Executing action SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web)
+
+Executing action method SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web) with arguments (SimpleBlogAppV2.BusinessLayer.Commands.QueryCommands.GetAdminQuery.GetAdminQueryCommand) - Validation state: Valid
+
+Entity Framework Core 2.1.4-rtm-31024 initialized 'SimpleBlogAppV2DbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: MigrationsAssembly=SimpleBlogAppV2.EntityFrameworkCore 
+
+No migrations were applied. The database is already up to date.
+
+The Include operation for navigation '[p].Category' is unnecessary and was ignored because the navigation is not reachable in the final query results. See https://go.microsoft.com/fwlink/?linkid=850303 for more information.
+
+The Include operation for navigation '[p].Category' is unnecessary and was ignored because the navigation is not reachable in the final query results. See https://go.microsoft.com/fwlink/?linkid=850303 for more information.
+
+Executed action method SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 41.4334ms.
+
+Executing ObjectResult, writing value of type 'SimpleBlogAppV2.BusinessLayer.DTO.QueryResultDTO`1[[SimpleBlogAppV2.BusinessLayer.DTO.PostDTO, SimpleBlogAppV2.BusinessLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+
+Executed action SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web) in 50.2944ms
+
+Successfully validated the token.
+
+Route matched with {action = "GetAdminPosts", controller = "Posts", page = "", area = ""}. Executing action SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web)
+
+Executing action method SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web) with arguments (SimpleBlogAppV2.BusinessLayer.Commands.QueryCommands.GetAdminQuery.GetAdminQueryCommand) - Validation state: Valid
+
+Entity Framework Core 2.1.4-rtm-31024 initialized 'SimpleBlogAppV2DbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: MigrationsAssembly=SimpleBlogAppV2.EntityFrameworkCore 
+
+No migrations were applied. The database is already up to date.
+
+Executed action method SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 29.4594ms.
+
+Executing ObjectResult, writing value of type 'SimpleBlogAppV2.BusinessLayer.DTO.QueryResultDTO`1[[SimpleBlogAppV2.BusinessLayer.DTO.PostDTO, SimpleBlogAppV2.BusinessLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+
+Executed action SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web) in 50.3507ms
+
+Successfully validated the token.
+
+Route matched with {action = "GetAdminPosts", controller = "Posts", page = "", area = ""}. Executing action SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web)
+
+Executing action method SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web) with arguments (SimpleBlogAppV2.BusinessLayer.Commands.QueryCommands.GetAdminQuery.GetAdminQueryCommand) - Validation state: Valid
+
+Entity Framework Core 2.1.4-rtm-31024 initialized 'SimpleBlogAppV2DbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: MigrationsAssembly=SimpleBlogAppV2.EntityFrameworkCore 
+
+No migrations were applied. The database is already up to date.
+
+Executed action method SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 18.5571ms.
+
+Executing ObjectResult, writing value of type 'SimpleBlogAppV2.BusinessLayer.DTO.QueryResultDTO`1[[SimpleBlogAppV2.BusinessLayer.DTO.PostDTO, SimpleBlogAppV2.BusinessLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+
+Executed action SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web) in 25.1658ms
+
+Successfully validated the token.
+
+Route matched with {action = "GetAdminPosts", controller = "Posts", page = "", area = ""}. Executing action SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web)
+
+Executing action method SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web) with arguments (SimpleBlogAppV2.BusinessLayer.Commands.QueryCommands.GetAdminQuery.GetAdminQueryCommand) - Validation state: Valid
+
+Entity Framework Core 2.1.4-rtm-31024 initialized 'SimpleBlogAppV2DbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: MigrationsAssembly=SimpleBlogAppV2.EntityFrameworkCore 
+
+No migrations were applied. The database is already up to date.
+
+The Include operation for navigation '[p].Category' is unnecessary and was ignored because the navigation is not reachable in the final query results. See https://go.microsoft.com/fwlink/?linkid=850303 for more information.
+
+Executed action method SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 26.0641ms.
+
+Executing ObjectResult, writing value of type 'SimpleBlogAppV2.BusinessLayer.DTO.QueryResultDTO`1[[SimpleBlogAppV2.BusinessLayer.DTO.PostDTO, SimpleBlogAppV2.BusinessLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+
+Executed action SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web) in 34.1831ms
+
+Successfully validated the token.
+
+Route matched with {action = "GetAdminPosts", controller = "Posts", page = "", area = ""}. Executing action SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web)
+
+Executing action method SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web) with arguments (SimpleBlogAppV2.BusinessLayer.Commands.QueryCommands.GetAdminQuery.GetAdminQueryCommand) - Validation state: Valid
+
+Entity Framework Core 2.1.4-rtm-31024 initialized 'SimpleBlogAppV2DbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: MigrationsAssembly=SimpleBlogAppV2.EntityFrameworkCore 
+
+No migrations were applied. The database is already up to date.
+
+The Include operation for navigation '[p].Category' is unnecessary and was ignored because the navigation is not reachable in the final query results. See https://go.microsoft.com/fwlink/?linkid=850303 for more information.
+
+Executed action method SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 23.1356ms.
+
+Executing ObjectResult, writing value of type 'SimpleBlogAppV2.BusinessLayer.DTO.QueryResultDTO`1[[SimpleBlogAppV2.BusinessLayer.DTO.PostDTO, SimpleBlogAppV2.BusinessLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+
+Executed action SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web) in 29.2231ms
+
+Successfully validated the token.
+
+Route matched with {action = "GetAdminPosts", controller = "Posts", page = "", area = ""}. Executing action SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web)
+
+Executing action method SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web) with arguments (SimpleBlogAppV2.BusinessLayer.Commands.QueryCommands.GetAdminQuery.GetAdminQueryCommand) - Validation state: Valid
+
+Entity Framework Core 2.1.4-rtm-31024 initialized 'SimpleBlogAppV2DbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: MigrationsAssembly=SimpleBlogAppV2.EntityFrameworkCore 
+
+No migrations were applied. The database is already up to date.
+
+Executed action method SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 18.2524ms.
+
+Executing ObjectResult, writing value of type 'SimpleBlogAppV2.BusinessLayer.DTO.QueryResultDTO`1[[SimpleBlogAppV2.BusinessLayer.DTO.PostDTO, SimpleBlogAppV2.BusinessLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+
+Executed action SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web) in 24.3826ms
+
+Successfully validated the token.
+
+Route matched with {action = "GetAdminPosts", controller = "Posts", page = "", area = ""}. Executing action SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web)
+
+Executing action method SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web) with arguments (SimpleBlogAppV2.BusinessLayer.Commands.QueryCommands.GetAdminQuery.GetAdminQueryCommand) - Validation state: Valid
+
+Entity Framework Core 2.1.4-rtm-31024 initialized 'SimpleBlogAppV2DbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: MigrationsAssembly=SimpleBlogAppV2.EntityFrameworkCore 
+
+No migrations were applied. The database is already up to date.
+
+Executed action method SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 21.2206ms.
+
+Executing ObjectResult, writing value of type 'SimpleBlogAppV2.BusinessLayer.DTO.QueryResultDTO`1[[SimpleBlogAppV2.BusinessLayer.DTO.PostDTO, SimpleBlogAppV2.BusinessLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+
+Executed action SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web) in 27.1148ms
+
+Successfully validated the token.
+
+Route matched with {action = "GetAdminPosts", controller = "Posts", page = "", area = ""}. Executing action SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web)
+
+Executing action method SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web) with arguments (SimpleBlogAppV2.BusinessLayer.Commands.QueryCommands.GetAdminQuery.GetAdminQueryCommand) - Validation state: Valid
+
+Entity Framework Core 2.1.4-rtm-31024 initialized 'SimpleBlogAppV2DbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: MigrationsAssembly=SimpleBlogAppV2.EntityFrameworkCore 
+
+No migrations were applied. The database is already up to date.
+
+Executed action method SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 23.5445ms.
+
+Executing ObjectResult, writing value of type 'SimpleBlogAppV2.BusinessLayer.DTO.QueryResultDTO`1[[SimpleBlogAppV2.BusinessLayer.DTO.PostDTO, SimpleBlogAppV2.BusinessLayer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+
+Executed action SimpleBlogAppV2.Web.Controllers.PostsController.GetAdminPosts (SimpleBlogAppV2.Web) in 43.5577ms
+

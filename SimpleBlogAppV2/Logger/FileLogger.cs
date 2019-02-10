@@ -9,9 +9,9 @@ namespace SimpleBlogAppV2.Logger
 	{
 		private readonly string sqlPath;
 		private readonly string otherPath;
-		private object _lock = new object();
+		private readonly object _lock = new object();
 
-		private string[] filter = { "SELECT", "SET", "INSERT", "GET", "POST", "PUT", "DELETE", "LINQ", "expression", "Request finished" };
+		private readonly string[] filter = { "SELECT", "SET", "INSERT", "GET", "POST", "PUT", "DELETE", "LINQ", "expression", "Request finished" };
 
 		public FileLogger(string path)
 		{
@@ -20,6 +20,13 @@ namespace SimpleBlogAppV2.Logger
 
 			File.WriteAllText(sqlPath, "");
 			File.WriteAllText(otherPath, "");
+		}
+
+		private static ILogger instance = null;
+
+		public static ILogger Create(string path)
+		{
+			return instance ?? (instance = new FileLogger(path));
 		}
 
 		public IDisposable BeginScope<TState>(TState state)
@@ -35,7 +42,9 @@ namespace SimpleBlogAppV2.Logger
 		public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
 		{
 			if (formatter == null)
+			{
 				return;
+			}
 
 			lock (_lock)
 			{
@@ -43,11 +52,17 @@ namespace SimpleBlogAppV2.Logger
 				{
 					string result = formatter(state, exception);
 					if (filter.Any(f => result.Contains(f)))
+					{
 						File.AppendAllText(sqlPath, result + Environment.NewLine + Environment.NewLine);
+					}
 					else
+					{
 						File.AppendAllText(otherPath, result + Environment.NewLine + Environment.NewLine);
+					}
 				}
-				catch { }
+				catch
+				{
+				}
 			}
 		}
 	}
