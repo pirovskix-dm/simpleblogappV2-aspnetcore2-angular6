@@ -11,14 +11,11 @@ using SimpleBlogAppV2.Identity.Factory;
 using SimpleBlogAppV2.Identity.Middleware;
 using SimpleBlogAppV2.Identity.Models;
 using System;
-using System.Text;
 
 namespace SimpleBlogAppV2.Identity
 {
 	public static class IdentityConfiguration
 	{
-		private static readonly SymmetricSecurityKey signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("iNivDmHLpUA223sqsfhqGbMRdRj1PVkH")); // todo: get this from somewhere secure
-
 		public static IdentityBuilder ConfigureIdentity(this IServiceCollection services, IConfiguration configuration)
 		{
 			services.AddCors();
@@ -36,11 +33,19 @@ namespace SimpleBlogAppV2.Identity
 		private static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
 		{
 			var jwtAppSettingOptions = configuration.GetSection("JwtIssuerOptions");
-			services.Configure<JwtIssuerOptions>(options =>
+			var jwtIssuerOptions = new JwtIssuerOptions()
 			{
-				options.Issuer = jwtAppSettingOptions["Issuer"];
-				options.Audience = jwtAppSettingOptions["Audience"];
-				options.SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
+				Issuer = jwtAppSettingOptions["Issuer"],
+				Audience = jwtAppSettingOptions["Audience"],
+				ValidFor = TimeSpan.FromMinutes(5),
+				KEY = "iNivDmHLpUA223sqsfhqGbMRdRj1PVkH" // todo: get this from somewhere secure
+			};
+			services.Configure<JwtIssuerOptions>(option =>
+			{
+				option.Issuer = jwtIssuerOptions.Issuer;
+				option.Audience = jwtIssuerOptions.Audience;
+				option.ValidFor = jwtIssuerOptions.ValidFor;
+				option.KEY = jwtIssuerOptions.KEY;
 			});
 
 			services.AddAuthorization(options =>
@@ -49,7 +54,7 @@ namespace SimpleBlogAppV2.Identity
 					.RequireAuthenticatedUser()
 					.Build();
 
-				options.AddPolicy("ApiUser", policy => policy.RequireClaim(JwtClaimIdentifiers.Rol, JwtClaimIdentifiers.ApiAccess));
+				options.AddPolicy("GetAdminPosts", policy => policy.RequireClaim(JwtClaimIdentifiers.Rol, "Admin"));
 			});
 
 			services.
@@ -65,13 +70,13 @@ namespace SimpleBlogAppV2.Identity
 					o.TokenValidationParameters = new TokenValidationParameters
 					{
 						ValidateIssuer = true,
-						ValidIssuer = jwtAppSettingOptions["Issuer"],
+						ValidIssuer = jwtIssuerOptions.Issuer,
 
 						ValidateAudience = true,
-						ValidAudience = jwtAppSettingOptions["Audience"],
+						ValidAudience = jwtIssuerOptions.Audience,
 
 						ValidateIssuerSigningKey = true,
-						IssuerSigningKey = signingKey,
+						IssuerSigningKey = jwtIssuerOptions.SymmetricSecurityKey,
 
 						RequireExpirationTime = false,
 						ValidateLifetime = false,
@@ -107,8 +112,7 @@ namespace SimpleBlogAppV2.Identity
 				options.Lockout.MaxFailedAccessAttempts = 999;
 				options.Lockout.AllowedForNewUsers = false;
 
-				options.User.AllowedUserNameCharacters =
-				"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+				options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
 				options.User.RequireUniqueEmail = true;
 			});
 		}

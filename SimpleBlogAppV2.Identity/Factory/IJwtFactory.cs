@@ -1,12 +1,12 @@
-﻿using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using SimpleBlogAppV2.Core.Entities;
+using System.Security.Claims;
 
 namespace SimpleBlogAppV2.Identity.Factory
 {
 	public interface IJwtFactory
 	{
-		Task<string> GenerateEncodedToken(string userName, ClaimsIdentity identity);
+		string GenerateEncodedToken(string userName, ClaimsIdentity identity);
 
-		ClaimsIdentity GenerateClaimsIdentity(string userName, string id);
+		ClaimsIdentity GenerateClaimsIdentity(AppUser user);
 	}
 }

@@ -38,19 +38,20 @@ namespace SimpleBlogAppV2.Identity.Commands.IdentityCommands.Login
 			//{
 			//	id = identity.Claims.Single(c => c.Type == "id").Value,
 			//	auth_token = await jwtFactory.GenerateEncodedToken(request.UserName, identity),
-			//	expires_in = (int)jwtOptions.ValidFor.TotalSeconds
+			//	expires_in = (int)jwtOptions.ValidFor.TotalSeconds,
+			//	role = identity.Claims.Single(c => c.Type == JwtClaimIdentifiers.Rol).Value,
 			//};
 
-			//return JsonConvert.SerializeObject(response, Formatting.Indented);\
-			return await jwtFactory.GenerateEncodedToken(request.UserName, identity).ConfigureAwait(false);
+			//return JsonConvert.SerializeObject(response, Formatting.Indented);
+			return jwtFactory.GenerateEncodedToken(request.UserName, identity);
 		}
 
 		private async Task<ClaimsIdentity> GetClaimsIdentity([Required] string userName, [Required] string password)
 		{
-			var userToVerify = await userManager.FindByNameAsync(userName).ConfigureAwait(false);
+			AppUser userToVerify = await userManager.FindByNameAsync(userName).ConfigureAwait(false);
 			if (userToVerify != null && await userManager.CheckPasswordAsync(userToVerify, password).ConfigureAwait(false))
 			{
-				return jwtFactory.GenerateClaimsIdentity(userName, userToVerify.Id);
+				return jwtFactory.GenerateClaimsIdentity(userToVerify);
 			}
 
 			return null;

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using SimpleBlogAppV2.Identity.Constants;
 using System.Threading.Tasks;
 
 namespace SimpleBlogAppV2.Identity.Middleware
@@ -15,7 +14,7 @@ namespace SimpleBlogAppV2.Identity.Middleware
 
 		public async Task Invoke(HttpContext context)
 		{
-			string token = context.Request.Cookies[JwtClaimIdentifiers.ApiAccess];
+			string token = context.Request.Cookies["simpleBlogApp_auth_token"];
 			if (!string.IsNullOrWhiteSpace(token))
 			{
 				context.Request.Headers.Append("Authorization", "Bearer " + token);

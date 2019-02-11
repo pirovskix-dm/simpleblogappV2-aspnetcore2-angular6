@@ -31,7 +31,7 @@ namespace SimpleBlogAppV2.Web.Controllers
 			return Ok(await mediator.Send(command));
 		}
 
-		[Authorize(Policy = "ApiUser")]
+		[Authorize(Policy = "GetAdminPosts")]
 		[HttpGet("admin")]
 		[ProducesResponseType(typeof(QueryResultDTO<PostDTO>), (int)HttpStatusCode.OK)]
 		public async Task<IActionResult> GetAdminPosts(GetAdminQueryCommand command)

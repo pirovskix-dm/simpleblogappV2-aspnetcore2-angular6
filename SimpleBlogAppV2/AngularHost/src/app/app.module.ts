@@ -23,6 +23,9 @@ import {CategoryService} from './services/category.service';
 import {CookieService} from 'ngx-cookie-service';
 
 import {AuthGuard} from './guards/auth.guard';
+import {RoleGuard} from './guards/role.guard';
+
+import {Roles} from './Constants/Roles';
 
 @NgModule({
 	declarations: [
@@ -48,7 +51,7 @@ import {AuthGuard} from './guards/auth.guard';
 		RouterModule.forRoot([
 			{path: '', component: BlogComponent, pathMatch: 'full'},
 			{path: 'home', redirectTo: ''},
-			{path: 'admin', component: AdminComponent, canActivate: [AuthGuard]},
+			{path: 'admin', component: AdminComponent, canActivate: [RoleGuard], data: { expectedRole: Roles.ADMIN}},
 			{path: 'login', component: LoginFormComponent},
 			{path: 'error', redirectTo: ''},
 			{path: 'post/create', component: PostFormComponent, canActivate: [AuthGuard]},

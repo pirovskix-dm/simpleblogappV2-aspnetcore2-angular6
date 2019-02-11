@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {AccountService} from '../../services/account.service';
+import {Roles} from '../../Constants/Roles';
 
 @Component({
 	selector: 'app-nav-menu',
@@ -14,16 +15,24 @@ export class NavMenuComponent {
 	) {
 	}
 
-	logout() {
+	public logout(): void {
 		this.accountService.logout();
 		this.collapse();
 	}
 
-	collapse() {
+	public collapse(): void {
 		this.isExpanded = false;
 	}
 
-	toggle() {
+	public toggle(): void {
 		this.isExpanded = !this.isExpanded;
+	}
+
+	public isAdmin(): boolean {
+		return this.accountService.getUserRole() === Roles.ADMIN;
+	}
+
+	public isLoggedIn(): boolean {
+		return this.accountService.isLoggedIn();
 	}
 }
